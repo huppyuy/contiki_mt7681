@@ -1,0 +1,195 @@
+
+CONTIKI_CPU=$(CONTIKI)/cpu/n9/mt7681
+CONTIKI_CPU_DIRS = sdk/Src/cust/tcpip sdk/Src/cust/ sdk/Src/src/include . include sdk/Src/src/include/api sdk/Src/src/include/driver sdk/Src/src/tcpip/apps sdk/Src/src/tcpip/apps/app_api sdk/Src/src/tcpip/apps/iot_tcp_app sdk/Src/src/tcpip/apps/iot_udp_app sdk/Src/src/tcpip/lib sdk/Src/src/tcpip/mt76xx sdk/Src/src/tcpip/uip
+MT_SDK_DIR = $(CONTIKI_CPU)/sdk/Src
+
+include $(MT_SDK_DIR)/buildspec.mak
+
+#*******************************************************************************
+# DEFINE PROJECT
+#*******************************************************************************
+PRODUCT_DEF				=	MT$(v)
+CHIPECO_DEF				=	MT$(v)_E$(e)
+
+PRODUCT_VERSION			=	$(v)
+ECO_VERSION				=	$(e)
+RELEASE_VERSION			=	$(r)
+BT_RADIO_VERSION		=	$(o)
+WL_RADIO_VERSION		=	$(o)
+BUILD_TYPE				=	$(b)
+PACKAGE_BUILD			=	$(PKG)
+
+include $(MT_SDK_DIR)/mak/MT7681/compiler.mk
+include $(MT_SDK_DIR)/mak/MT7681/tools.mk
+
+#*******************************************************************************
+# DEFINE SOURCE, OUTPUT AND INCLUDE PATH
+#*******************************************************************************
+API_PATH			=	$(MT_SDK_DIR)/cust
+
+# After changing FLASH_XIP_164, 
+# It is must compile all Firmwares (Recovery, STA, AP)
+# Then upgrade loader, recovery, ap, sta firmwares in order by uart,  
+# or upgrade MT7681_all.bin / MT7681_all_xip164.bin by Flash writer
+ifndef FLASH_XIP_164
+FLASH_XIP_164 = 0
+endif
+
+ifeq ($(FLASH_XIP_164),1)
+XIPSIZE       = _xip164
+endif
+
+ifeq ($(BUILD_TYPE),0)
+OPTION = recovery
+include	$(MT_SDK_DIR)/mak/$(PRODUCT_DEF)/flags_recovery.mk
+LDS_FILE			=	$(MT_SDK_DIR)/mak/$(PRODUCT_DEF)/recovery.lds
+BIN_HEADER_TYPE         = 2
+BIN_HEADER_XIP_TYPE     = 2
+LIB_CUSTOM              = andesrecovery
+else
+ifeq ($(BUILD_TYPE),1)
+OPTION = sta
+include	$(MT_SDK_DIR)/mak/$(PRODUCT_DEF)/flags_sta.mk
+LDS_FILE			=	$(MT_SDK_DIR)/mak/$(PRODUCT_DEF)/sta$(XIPSIZE).lds
+BIN_HEADER_TYPE         = 4
+BIN_HEADER_XIP_TYPE     = 5
+LIB_CUSTOM              = andessta
+else
+ifeq ($(BUILD_TYPE),2)
+OPTION = ap
+include	$(MT_SDK_DIR)/mak/$(PRODUCT_DEF)/flags_ap.mk
+LDS_FILE			=	$(MT_SDK_DIR)/mak/$(PRODUCT_DEF)/ap$(XIPSIZE).lds
+BIN_HEADER_TYPE         = 6
+BIN_HEADER_XIP_TYPE     = 7
+LIB_CUSTOM              = andesap
+else
+$(error Undefined BUILD_TYPE = $(b). Please check buildspec.mak)
+endif
+endif
+endif
+
+ifeq ($(FLASH_XIP_164),1)
+FUNCFLAGS += -DFLASH_XIP_164_SUPPORT=1
+endif
+
+MT7681_OUT = mt7681$(XIPSIZE)
+
+OUT_PATH			=	$(MT7681_OUT)/$(OPTION)
+BINARY      	    =	$(OUT_PATH)/$(PRODUCT_DEF)_$(OPTION).bin
+BINARY_OLD      	=	$(OUT_PATH)/$(PRODUCT_DEF)_$(OPTION)_old.bin
+HEADER_BIN_OLD      =	$(OUT_PATH)/$(PRODUCT_DEF)_$(OPTION)_header_old.bin
+BINARY_RAM		    =	$(OUT_PATH)/$(PRODUCT_DEF)_$(OPTION)_ram.bin
+BINARY_XIP		    =	$(OUT_PATH)/$(PRODUCT_DEF)_$(OPTION)_xip.bin
+BINARY_OVERLAY      =	$(OUT_PATH)/$(PRODUCT_DEF)_$(OPTION)_overlay.bin
+
+HEADER_BIN          =	$(OUT_PATH)/$(PRODUCT_DEF)_$(OPTION)_header.bin
+HEADER_BINARY_RAM   =	$(OUT_PATH)/$(PRODUCT_DEF)_$(OPTION)_ram_header.bin
+HEADER_BINARY_XIP   =	$(OUT_PATH)/$(PRODUCT_DEF)_$(OPTION)_xip_header.bin
+
+MAP_FILE			=	$(OBJECTDIR)/$(PRODUCT_DEF)_$(OPTION).map
+
+ASM_OBJS			=	$(API_PATH)/vectors.o $(API_PATH)/startup.o $(API_PATH)/ctxsw.o 
+
+CFLAGS += $(BFLAGS) $(TFLAGS) $(OFLAGS) $(MFLAGS) $(DBGFLAGS) $(FUNCFLAGS)
+
+
+
+CONTIKI_SOURCEFILES += clock.c rand.c ap_pub.c \
+crypt_crc.c \
+iot_aes_pub.c \
+iot_at_cmd.c \
+iot_at_cmd_tcpip.c \
+iot_at_cmd_utility.c \
+iot_custom.c \
+iot_custom_uart2wifi.c \
+iot_parse.c \
+iot_parse_conn_mgmt.c \
+iot_uart_rb.c \
+iot_uplink.c \
+iot_xmodem.c \
+main_pub.c \
+misc_pub.c \
+mt7681_ChSw_pub.c \
+printf.c \
+rtmp_data_pub.c \
+spi-flash_pub.c \
+stdlib.c \
+uip-neighbor.c \
+webclient-strings.c \
+uip_timer.c \
+memb.c \
+uiplib.c \
+iot_tcp_app.c \
+iot_udp_app.c \
+sample_resolv_usage.c \
+sample_udp_client.c \
+dhcpd.c \
+mt76xx_dev.c \
+uip-split.c \
+uip_arp.c \
+tcpip_main.c \
+clock-arch.c \
+resolv.c \
+uip.c \
+dhcpc.c \
+cloudclient.c \
+sample_udp_server.c \
+iot_tcpip_interface.c \
+webclient.c \
+uip-fw.c \
+wifi_task_pub.c
+
+TARGET_LIBFILES += $(ASM_OBJS) -l$(LIB_CUSTOM) --end-group
+LDFLAGS += $(LFLAGS) -L$(MT_SDK_DIR) -T $(LDS_FILE) -Map $(MAP_FILE) --start-group
+
+$(OUT_PATH) :
+	@mkdir -p $@
+
+clean_bin :
+	@rm -rf $(MT7681_OUT)
+	@rm -f file_header
+
+binary : $(OUT_PATH) $(BINARY_OLD) $(BINARY_RAM) $(BINARY_XIP) $(BINARY_OVERLAY) 
+
+# Pattern for binary generation
+#ifeq ($(CHIPECO_DEF),MT7681_E2)
+$(BINARY_OLD) : $(CONTIKI_PROJECT).$(TARGET)
+	@echo Making $(BINARY_OLD) ...
+	@$(OBJCOPY)  -O binary $< $@
+$(BINARY_RAM) : $(CONTIKI_PROJECT).$(TARGET)
+	@echo Making $(BINARY_RAM) ...
+	@$(OBJCOPY) $(COPY_SRAM) -O binary $< $@
+$(BINARY_XIP) : $(CONTIKI_PROJECT).$(TARGET)
+	@echo Making $(BINARY_XIP) ...
+	@$(OBJCOPY) $(COPY_XIP) -O binary $< $@
+$(BINARY_OVERLAY) : $(CONTIKI_PROJECT).$(TARGET)
+	@echo Making $(BINARY_OVERLAY) ...
+	@$(OBJCOPY) $(COPY_OVERLAY) -O binary $< $@
+#endif
+
+#generate flash bin 
+ifeq ($(BUILD_TYPE),0)
+	@./$(MT_SDK_DIR)/flash_merge$(XIPSIZE).sh 3 $(MT7681_OUT) $(MT_SDK_DIR)
+endif	
+
+ifeq ($(BUILD_TYPE),1)
+	@./$(MT_SDK_DIR)/flash_merge$(XIPSIZE).sh 1 $(MT7681_OUT) $(MT_SDK_DIR)
+	@./$(MT_SDK_DIR)/flash_merge$(XIPSIZE).sh 3 $(MT7681_OUT) $(MT_SDK_DIR)
+endif	
+	
+ifeq ($(BUILD_TYPE),2)
+	@./$(MT_SDK_DIR)/flash_merge$(XIPSIZE).sh 2 $(MT7681_OUT) $(MT_SDK_DIR)
+	@./$(MT_SDK_DIR)/flash_merge$(XIPSIZE).sh 3 $(MT7681_OUT) $(MT_SDK_DIR)
+endif	
+
+#generate header bin
+ifeq ($(PRODUCT_VERSION),7681)
+	@if [ -s  $(BINARY_XIP) -o -s  $(BINARY_OVERLAY) ]; then \
+	   $(RM)  $(BINARY_OLD) ;\
+	   ./$(MT_SDK_DIR)/header.sh $(BINARY) $(BIN_HEADER_TYPE) $(HEADER_BIN);\
+	else \
+	   $(RM)  $(BINARY_RAM) $(BINARY_XIP) $(BINARY_OVERLAY);\
+	   ./$(MT_SDK_DIR)/header.sh $(BINARY_OLD) $(BIN_HEADER_TYPE) $(HEADER_BIN);\
+	fi;
+	
+endif

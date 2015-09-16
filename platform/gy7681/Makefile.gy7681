@@ -1,0 +1,11 @@
+
+include $(CONTIKI)/cpu/n9/mt7681/Makefile.mt7681
+
+ifeq ($(UIP_CONF_IPV6),1)
+  CFLAGS += -DUIP_CONF_IPV6=1
+endif
+
+
+
+
+
