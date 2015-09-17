@@ -1,5 +1,22 @@
+/**
+ * \defgroup clock Clock interface
+ *
+ * The clock interface is the interface between the \ref timer "timer library"
+ * and the platform specific clock functionality. The clock
+ * interface must be implemented for each platform that uses the \ref
+ * timer "timer library".
+ *
+ * The clock interface does only one this: it measures time. The clock
+ * interface provides a macro, CLOCK_SECOND, which corresponds to one
+ * second of system time.
+ *
+ * \sa \ref timer "Timer library"
+ *
+ * @{
+ */
+
 /*
- * Copyright (c) 2005, Swedish Institute of Computer Science
+ * Copyright (c) 2004, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,52 +45,44 @@
  *
  * This file is part of the uIP TCP/IP stack
  *
- * @(#)$Id: dhcpc.h,v 1.3 2006/06/11 21:46:37 adam Exp $
+ * Author: Adam Dunkels <adam@sics.se>
+ *
+ * $Id: clock.h,v 1.3 2006/06/11 21:46:39 adam Exp $
  */
-#ifndef __DHCPC_H__
-#define __DHCPC_H__
+#ifndef __MT_CLOCK_H__
+#define __MT_CLOCK_H__
 
-#include "uip_timer.h"
-#include "xip_ovly.h"
-#include "uip.h"
+#include "clock-arch.h"
 
-#define STATE_INITIAL                  0
-#define STATE_SEND_DIS               1
-#define STATE_OFFER_RECEIVED   2
-#define STATE_SEND_REQ               3
-#define STATE_CONFIG_RECEIVED 4
-#define STATE_CONFIG_DONE        5
+/**
+ * Initialize the clock library.
+ *
+ * This function initializes the clock library and should be called
+ * from the main() function of the system.
+ *
+ */
+void clock_init(void);
 
-#define DHCPC_SERVER_PORT       67
-#define DHCPC_CLIENT_PORT       68
+/**
+ * Get the current clock time.
+ *
+ * This function returns the current system clock time.
+ *
+ * \return The current clock time, measured in system ticks.
+ */
+clock_time_t clock_time(void);
 
-struct dhcpc_state {
-    char state;
-    UIP_UDP_CONN *conn;
-    struct timer timer;
-    struct timer lease_timer;
-    u16_t ticks;
-    const void *mac_addr;
-    int mac_len;
+/**
+ * A second, measured in system clock time.
+ *
+ * \hideinitializer
+ */
+#ifdef CLOCK_CONF_SECOND
+#define CLOCK_SECOND CLOCK_CONF_SECOND
+#else
+#define CLOCK_SECOND (clock_time_t)32
+#endif
 
-    u8_t serverid[4];
+#endif /* __MT_CLOCK_H__ */
 
-    u16_t lease_time[2];
-    u16_t ipaddr[2];
-    u16_t netmask[2];
-    u16_t dnsaddr[2];
-    u16_t default_router[2];
-};
-
-void dhcpc_init(const void *mac_addr, int mac_len) XIP_ATTRIBUTE(".xipsec1");
-void dhcpc_request(void);
-void dhcpc_appcall(void);
-void dhcpc_configured(const struct dhcpc_state *s)  XIP_ATTRIBUTE(".xipsec1");
-void dhcpc_set_state(u8_t state);
-u8_t dhcpc_get_state(void);
-void handle_dhcp(void)  XIP_ATTRIBUTE(".xipsec1");
-void _handle_dhcp(void) OVLY_ATTRIBUTE(".ovlysec10");
-void ws_got_ip(void)   XIP_ATTRIBUTE(".xipsec1");
-void ws_got_ip_fail(void)  XIP_ATTRIBUTE(".xipsec1");
-
-#endif /* __DHCPC_H__ */
+/** @} */

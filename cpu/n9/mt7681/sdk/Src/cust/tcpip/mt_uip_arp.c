@@ -59,7 +59,7 @@
  */
 
 
-#include "uip_arp.h"
+#include "mt_uip_arp.h"
 #include "iot_api.h"
 #include <string.h>
 

@@ -1,5 +1,5 @@
-#ifndef _ASSERT_H_
-#define _ASSERT_H_
+#ifndef _MT_ASSERT_H_
+#define _MT_ASSERT_H_
 /******************************************************************************
  * MODULE NAME:     assert.h
  * PROJECT CODE:    __MT7681__
@@ -38,5 +38,5 @@ STATIC INLINE void ASSERT(int32 Expression) { if ((Expression) == 0) { while(1);
 #define ASSERT(expression)
 #endif
 
-#endif /* _ASSERT_H_ */
+#endif /* _MT_ASSERT_H_ */
 

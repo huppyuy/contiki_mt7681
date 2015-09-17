@@ -27,7 +27,7 @@
 #include "string.h"
 #include "flash_map.h"
 #include "iot_api.h"
-#include "eeprom.h"
+#include "mt_eeprom.h"
 
 #define SOH 0x01
 #define STX 0x02

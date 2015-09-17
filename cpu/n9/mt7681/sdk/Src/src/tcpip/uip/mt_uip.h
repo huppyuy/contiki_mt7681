@@ -50,10 +50,10 @@
  *
  */
 
-#ifndef __UIP_H__
-#define __UIP_H__
+#ifndef __MT_UIP_H__
+#define __MT_UIP_H__
 
-#include "uipopt.h"
+#include "mt_uipopt.h"
 #include "xip_ovly.h"
 
 /**
@@ -1638,7 +1638,7 @@ u16_t uip_udpchksum(void);
 #include "types.h"
 #include "iot_api.h"
 
-#endif /* __UIP_H__ */
+#endif /* __MT_UIP_H__ */
 
 
 /** @} */

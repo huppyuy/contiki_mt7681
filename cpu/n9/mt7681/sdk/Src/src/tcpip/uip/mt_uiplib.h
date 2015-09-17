@@ -40,8 +40,8 @@
  * $Id: uiplib.h,v 1.1 2006/06/07 09:15:19 adam Exp $
  *
  */
-#ifndef __UIPLIB_H__
-#define __UIPLIB_H__
+#ifndef __MT_UIPLIB_H__
+#define __MT_UIPLIB_H__
 
 /**
  * \addtogroup uipconvfunc
@@ -68,4 +68,4 @@ unsigned char uiplib_ipaddrconv(char *addrstr, unsigned char *addr);
 
 /** @} */
 
-#endif /* __UIPLIB_H__ */
+#endif /* __MT_UIPLIB_H__ */

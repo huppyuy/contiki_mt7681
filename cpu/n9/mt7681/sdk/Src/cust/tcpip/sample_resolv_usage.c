@@ -1,6 +1,6 @@
-#include "uip.h"
+#include "mt_uip.h"
 #include "sample_resolv_usage.h"
-#include "resolv.h"
+#include "mt_resolv.h"
 #include "uip_timer.h"
 
 struct sample_state {

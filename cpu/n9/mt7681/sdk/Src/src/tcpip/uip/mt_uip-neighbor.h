@@ -1,22 +1,5 @@
-/**
- * \defgroup clock Clock interface
- *
- * The clock interface is the interface between the \ref timer "timer library"
- * and the platform specific clock functionality. The clock
- * interface must be implemented for each platform that uses the \ref
- * timer "timer library".
- *
- * The clock interface does only one this: it measures time. The clock
- * interface provides a macro, CLOCK_SECOND, which corresponds to one
- * second of system time.
- *
- * \sa \ref timer "Timer library"
- *
- * @{
- */
-
 /*
- * Copyright (c) 2004, Swedish Institute of Computer Science.
+ * Copyright (c) 2006, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,44 +28,34 @@
  *
  * This file is part of the uIP TCP/IP stack
  *
- * Author: Adam Dunkels <adam@sics.se>
- *
- * $Id: clock.h,v 1.3 2006/06/11 21:46:39 adam Exp $
+ * $Id: uip-neighbor.h,v 1.2 2006/06/12 08:00:30 adam Exp $
  */
-#ifndef __CLOCK_H__
-#define __CLOCK_H__
-
-#include "clock-arch.h"
 
 /**
- * Initialize the clock library.
- *
- * This function initializes the clock library and should be called
- * from the main() function of the system.
- *
+ * \file
+ *         Header file for database of link-local neighbors, used by
+ *         IPv6 code and to be used by future ARP code.
+ * \author
+ *         Adam Dunkels <adam@sics.se>
  */
-void clock_init(void);
 
-/**
- * Get the current clock time.
- *
- * This function returns the current system clock time.
- *
- * \return The current clock time, measured in system ticks.
- */
-clock_time_t clock_time(void);
+#ifndef __MT_UIP_NEIGHBOR_H__
+#define __MT_UIP_NEIGHBOR_H__
 
-/**
- * A second, measured in system clock time.
- *
- * \hideinitializer
- */
-#ifdef CLOCK_CONF_SECOND
-#define CLOCK_SECOND CLOCK_CONF_SECOND
+#include "mt_uip.h"
+
+struct uip_neighbor_addr {
+#if UIP_NEIGHBOR_CONF_ADDRTYPE
+    UIP_NEIGHBOR_CONF_ADDRTYPE addr;
 #else
-#define CLOCK_SECOND (clock_time_t)32
+    struct uip_eth_addr addr;
 #endif
+};
 
-#endif /* __CLOCK_H__ */
+void uip_neighbor_init(void);
+void uip_neighbor_add(uip_ipaddr_t ipaddr, struct uip_neighbor_addr *addr);
+void uip_neighbor_update(uip_ipaddr_t ipaddr);
+struct uip_neighbor_addr *uip_neighbor_lookup(uip_ipaddr_t ipaddr);
+void uip_neighbor_periodic(void);
 
-/** @} */
+#endif /* __MT_UIP_NEIGHBOR_H__ */

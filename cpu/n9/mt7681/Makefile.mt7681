@@ -94,7 +94,7 @@ CFLAGS += $(BFLAGS) $(TFLAGS) $(OFLAGS) $(MFLAGS) $(DBGFLAGS) $(FUNCFLAGS)
 
 
 
-CONTIKI_SOURCEFILES += clock.c rand.c ap_pub.c \
+CONTIKI_SOURCEFILES += clock.c rand.c misc.c ap_pub.c \
 crypt_crc.c \
 iot_aes_pub.c \
 iot_at_cmd.c \
@@ -114,29 +114,29 @@ printf.c \
 rtmp_data_pub.c \
 spi-flash_pub.c \
 stdlib.c \
-uip-neighbor.c \
+mt_uip-neighbor.c \
 webclient-strings.c \
 uip_timer.c \
-memb.c \
-uiplib.c \
+mt_memb.c \
+mt_uiplib.c \
 iot_tcp_app.c \
 iot_udp_app.c \
 sample_resolv_usage.c \
 sample_udp_client.c \
 dhcpd.c \
 mt76xx_dev.c \
-uip-split.c \
-uip_arp.c \
+mt_uip-split.c \
+mt_uip_arp.c \
 tcpip_main.c \
 clock-arch.c \
-resolv.c \
-uip.c \
-dhcpc.c \
+mt_resolv.c \
+mt_uip.c \
+mt_dhcpc.c \
 cloudclient.c \
 sample_udp_server.c \
 iot_tcpip_interface.c \
-webclient.c \
-uip-fw.c \
+mt_webclient.c \
+mt_uip-fw.c \
 wifi_task_pub.c
 
 TARGET_LIBFILES += $(ASM_OBJS) -l$(LIB_CUSTOM) --end-group

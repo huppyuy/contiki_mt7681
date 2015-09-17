@@ -2,7 +2,7 @@
 #ifndef __IOT_UDP_APP_H__
 #define __IOT_UDP_APP_H__
 
-#include "uipopt.h"
+#include "mt_uipopt.h"
 
 struct iot_udp_app_state {
     u8_t fd;

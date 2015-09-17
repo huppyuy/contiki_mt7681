@@ -244,8 +244,8 @@ depend : $(ASM_FILES) $(SRC_FILES) $(HDR_FILES)
 # Pattern for assembling
 $(ASM_OBJS) : $(OBJ_PATH)/%.o : $(SRC_PATH)/%.S
 	@echo Compiling $< ...
-	@echo Compiling $< ... >> $(BUILD_LOG)
-	@$(AS) -g $(BFLAGS) $(CFLAGS) $(TFLAGS) $(OFLAGS) $(BFLAGS) $(MFLAGS) $(DBGFLAGS) $(FUNCFLAGS) $(foreach i,$(INCLUDES),-I $i) -o $@ $< 2>> $(BUILD_LOG)
+	@echo Compiling $< ... 
+	@$(AS) -g $(BFLAGS) $(CFLAGS) $(TFLAGS) $(OFLAGS) $(BFLAGS) $(MFLAGS) $(DBGFLAGS) $(FUNCFLAGS) $(foreach i,$(INCLUDES),-I $i) -o $@ $< 
 ifeq ($(PACKAGE_BUILD),1)
 	@$(STRIP) $@
 endif
@@ -253,18 +253,18 @@ endif
 # Pattern for compilering
 $(SRC_OBJS) : $(OBJ_PATH)/%.o : $(SRC_PATH)/%.c
 	@echo Compiling $< ...
-	@echo Compiling $< ... >> $(BUILD_LOG)
+	@echo Compiling $< ... 
 #	$(CC) -g $(BFLAGS) $(CFLAGS) $(TFLAGS) $(OFLAGS) $(BFLAGS) $(MFLAGS) $(DBGFLAGS) $(FUNCFLAGS) $(foreach i,$(INCLUDES),-I$i) -Wa,-ahl=$(@:.o=.lst) -o $@ $< 2>> $(BUILD_LOG)
-	@$(CC) -g $(BFLAGS) $(CFLAGS) $(TFLAGS) $(OFLAGS) $(BFLAGS) $(MFLAGS) $(DBGFLAGS) $(FUNCFLAGS) $(foreach i,$(INCLUDES),-I $i) -o $@ $< 2>> $(BUILD_LOG)
+	@$(CC) -g $(BFLAGS) $(CFLAGS) $(TFLAGS) $(OFLAGS) $(BFLAGS) $(MFLAGS) $(DBGFLAGS) $(FUNCFLAGS) $(foreach i,$(INCLUDES),-I $i) -o $@ $< 
 ifeq ($(PACKAGE_BUILD),1)
 	@$(STRIP) $@
 endif
 
 $(API_OBJS) : $(OBJ_PATH)/%.o : $(API_PATH)/%.c
 	echo Compiling $< ...
-	echo Compiling $< ... >> $(BUILD_LOG)
+	echo Compiling $< ... 
 #	$(CC) -g $(BFLAGS) $(CFLAGS) $(TFLAGS) $(OFLAGS) $(BFLAGS) $(MFLAGS) $(DBGFLAGS) $(FUNCFLAGS) $(foreach i,$(INCLUDES),-I$i) -Wa,-ahl=$(@:.o=.lst) -o $@ $< 2>> $(BUILD_LOG)
-	@$(CC) -g $(BFLAGS) $(CFLAGS) $(TFLAGS) $(OFLAGS) $(BFLAGS) $(MFLAGS) $(DBGFLAGS) $(FUNCFLAGS) $(foreach i,$(INCLUDES),-I $i) -o $@ $< 2>> $(BUILD_LOG)
+	@$(CC) -g $(BFLAGS) $(CFLAGS) $(TFLAGS) $(OFLAGS) $(BFLAGS) $(MFLAGS) $(DBGFLAGS) $(FUNCFLAGS) $(foreach i,$(INCLUDES),-I $i) -o $@ $< 
 	@$(STRIP) $@
 
 # Pattern for c code dependence
@@ -282,24 +282,24 @@ $(ASM_DEPENDS) : $(OBJ_PATH)/%.d : $(SRC_PATH)/%.S
 # Pattern for ELF generation
 $(IMAGE) : $(OBJECTS)
 	@echo Linking $@ ...
-	@echo Linking $@ ... >> $(BUILD_LOG)
+	@echo Linking $@ ... 
 	$(AR) r lib$(LIB_CUSTOM).a $(SRC_OBJS)
-	$(LD) $(LFLAGS) -T $(LDS_FILE) -Map $(MAP_FILE) -o $@ --start-group $(API_OBJS) $(ASM_OBJS) -L. -l$(LIB_CUSTOM) --end-group >> $(BUILD_LOG)	
+	$(LD) $(LFLAGS) -T $(LDS_FILE) -Map $(MAP_FILE) -o $@ --start-group $(API_OBJS) $(ASM_OBJS) -L. -l$(LIB_CUSTOM) --end-group 
 
 # Pattern for binary generation
 #ifeq ($(CHIPECO_DEF),MT7681_E2)
 $(BINARY_OLD) : $(IMAGE)
-	@echo Making $(BINARY_OLD) ... >> $(BUILD_LOG)
-	@$(OBJCOPY)  -O binary $< $@ 2>> $(BUILD_LOG)
+	@echo Making $(BINARY_OLD) ... 
+	@$(OBJCOPY)  -O binary $< $@ 
 $(BINARY_RAM) : $(IMAGE)
-	@echo Making $(BINARY_RAM) ... >> $(BUILD_LOG)
-	@$(OBJCOPY) $(COPY_SRAM) -O binary $< $@ 2>> $(BUILD_LOG)
+	@echo Making $(BINARY_RAM) ... 
+	@$(OBJCOPY) $(COPY_SRAM) -O binary $< $@ 
 $(BINARY_XIP) : $(IMAGE)
-	@echo Making $(BINARY_XIP) ... >> $(BUILD_LOG)
-	@$(OBJCOPY) $(COPY_XIP) -O binary $< $@ 2>> $(BUILD_LOG)
+	@echo Making $(BINARY_XIP) ... 
+	@$(OBJCOPY) $(COPY_XIP) -O binary $< $@ 
 $(BINARY_OVERLAY) : $(IMAGE)
-	@echo Making $(BINARY_OVERLAY) ... >> $(BUILD_LOG)
-	@$(OBJCOPY) $(COPY_OVERLAY) -O binary $< $@ 2>> $(BUILD_LOG)
+	@echo Making $(BINARY_OVERLAY) ... 
+	@$(OBJCOPY) $(COPY_OVERLAY) -O binary $< $@ 
 #endif
 	
 #generate flash bin 

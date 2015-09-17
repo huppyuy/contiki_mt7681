@@ -1,5 +1,5 @@
-#ifndef _EEPROM_H_
-#define _EEPROM_H_
+#ifndef _MT_EEPROM_H_
+#define _MT_EEPROM_H_
 /******************************************************************************
  * MODULE NAME:     eeprom.h
  * PROJECT CODE:    __MT7681__
@@ -268,5 +268,5 @@ typedef struct GNU_PACKED _EEPROM_CONFIG {
 
 } EEPROM_CFG, *PEEPROM_CFG;
 
-#endif /* _EFUSE_H_ */
+#endif /* _MT_EEPROM_H_ */
 

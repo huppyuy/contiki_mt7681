@@ -1,9 +1,9 @@
 #include "iot_tcp_app.h"
-#include "uip.h"
-#include "uiplib.h"
+#include "mt_uip.h"
+#include "mt_uiplib.h"
 #include "iot_api.h"
 #include "string.h"
-#include "webclient.h"
+#include "mt_webclient.h"
 #include "uip_timer.h"
 
 extern IOT_ADAPTER       IoTpAd;

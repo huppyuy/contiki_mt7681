@@ -58,10 +58,10 @@
  *
  */
 
-#ifndef __UIP_ARCH_H__
-#define __UIP_ARCH_H__
+#ifndef __MT_UIP_ARCH_H__
+#define __MT_UIP_ARCH_H__
 
-#include "uip.h"
+#include "mt_uip.h"
 
 /**
  * Carry out a 32-bit addition.
@@ -135,4 +135,4 @@ u16_t uip_udpchksum(void);
 /** @} */
 /** @} */
 
-#endif /* __UIP_ARCH_H__ */
+#endif /* __MT_UIP_ARCH_H__ */

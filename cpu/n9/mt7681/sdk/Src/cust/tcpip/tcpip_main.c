@@ -35,12 +35,12 @@
  *
  */
 
-#include "uip.h"
-#include "uip_arp.h"
+#include "mt_uip.h"
+#include "mt_uip_arp.h"
 #include "mt76xx_dev.h"
 #include "uip_timer.h"
 #include "iot_api.h"
-#include "dhcpc.h"
+#include "mt_dhcpc.h"
 #include "tcpip_main.h"
 
 #define BUF ((struct uip_eth_hdr *)&uip_buf[0])
@@ -126,7 +126,7 @@ _tcpip_init(void)
     p: pointer to data buffer, the buffer should start with eth header.
     len: buffer len
  */
-#include "uip.h"
+#include "mt_uip.h"
 
 int netif_rx(u8_t *p, u16_t len)
 {
@@ -231,7 +231,7 @@ uip_log(char *m)
     printf_high("UIP log: %s\n", m);
 }
 
-#ifdef __DHCPC_H__
+#ifdef __MT_DHCPC_H__
 void
 dhcpc_configured(const struct dhcpc_state *s)
 {
@@ -243,4 +243,4 @@ dhcpc_configured(const struct dhcpc_state *s)
     resolv_query("www.baidu.com");
 #endif
 }
-#endif /* __DHCPC_H__ */
+#endif /* __MT_DHCPC_H__ */

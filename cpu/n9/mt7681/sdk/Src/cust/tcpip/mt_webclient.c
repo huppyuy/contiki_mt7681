@@ -55,10 +55,10 @@
  *
  */
 
-#include "uip.h"
-#include "uiplib.h"
-#include "webclient.h"
-#include "resolv.h"
+#include "mt_uip.h"
+#include "mt_uiplib.h"
+#include "mt_webclient.h"
+#include "mt_resolv.h"
 #include "flash_map.h"
 
 #include <string.h>

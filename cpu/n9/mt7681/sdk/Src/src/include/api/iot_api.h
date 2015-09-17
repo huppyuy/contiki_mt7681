@@ -1,19 +1,19 @@
 #ifndef _IOT_API_H_
 #define _IOT_API_H_
 
-#include "config.h"
-#include "list.h"
+#include "mt_config.h"
+#include "mt_list.h"
 #include "cnm_timer.h"
 #include "flash_map.h"
 #include "stddef.h"
-#include "eeprom.h"
+#include "mt_eeprom.h"
 #include "rtmp_dot11.h"
 #include "rtmp_general_pub.h"
 #include "dot11i_wpa.h"
 #include "iot_custom.h"
 #include "bmd.h"
 #include "crypt_md5.h"
-#include "uip.h"
+#include "mt_uip.h"
 #include "spi-flash.h"
 
 /******************************************************************************

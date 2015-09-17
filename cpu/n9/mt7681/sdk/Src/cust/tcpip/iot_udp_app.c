@@ -2,9 +2,9 @@
 #include <string.h>
 
 #include "iot_udp_app.h"
-#include "dhcpc.h"
-#include "uip.h"
-#include "uiplib.h"
+#include "mt_dhcpc.h"
+#include "mt_uip.h"
+#include "mt_uiplib.h"
 #include "iot_api.h"
 #if CFG_SUPPORT_DNS
 #include "resolv.h"

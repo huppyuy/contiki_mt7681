@@ -49,10 +49,10 @@
  *
  */
 
-#ifndef __UIP_ARP_H__
-#define __UIP_ARP_H__
+#ifndef __MT_UIP_ARP_H__
+#define __MT_UIP_ARP_H__
 
-#include "uip.h"
+#include "mt_uip.h"
 
 
 extern struct uip_eth_addr uip_ethaddr;
@@ -141,4 +141,4 @@ void uip_arp_timer(void);
 /** @} */
 /** @} */
 
-#endif /* __UIP_ARP_H__ */
+#endif /* __MT_UIP_ARP_H__ */

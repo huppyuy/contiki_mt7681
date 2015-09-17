@@ -3,8 +3,6 @@
 #ifndef __IOT_TCPIP_INTERFACE_H__
 #define __IOT_TCPIP_INTERFACE_H__
 #include "uip.h"
-#include "iot_tcp_app.h"
-#include "iot_udp_app.h"
 
 int iot_netif_cfg(u8_t *ip, u8_t *mask, u8_t * gw, u8_t *dns);
 void iot_getipaddr(u8_t *ip, u8_t *mask, u8_t *gw, u8_t *dns);

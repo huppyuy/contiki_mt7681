@@ -61,7 +61,7 @@
 #ifndef __TIMER_H__
 #define __TIMER_H__
 
-#include "clock.h"
+#include "mt_clock.h"
 
 /**
  * A timer.

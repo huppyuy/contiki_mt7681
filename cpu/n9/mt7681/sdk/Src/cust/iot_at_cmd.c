@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include "string.h"
 #include "types.h"
-#include "uart.h"
+#include "mt_uart.h"
 #include "iot_custom.h"
 #include "iot_api.h"
-#include "eeprom.h"
+#include "mt_eeprom.h"
 #include "uart_sw.h"
 #include "bmd.h"
 #include "ate.h"

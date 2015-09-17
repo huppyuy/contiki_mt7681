@@ -1,4 +1,4 @@
-#include "uip.h"
+#include "mt_uip.h"
 #include "uip_timer.h"
 #if UIP_CLOUD_SERVER_SUPPORT
 extern ClientActivationInfo mt76xx_Activation;

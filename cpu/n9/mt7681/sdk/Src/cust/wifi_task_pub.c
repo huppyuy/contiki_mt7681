@@ -1,8 +1,8 @@
-#include <config.h>
+#include <mt_config.h>
 #include <types.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <timer.h>
+#include <mt_timer.h>
 #include <queue.h>
 #include "flash_map.h"
 #include "tcpip_main.h"
@@ -11,7 +11,7 @@
 #endif
 #include "iot_api.h"
 #include "iot_custom.h"
-#include "eeprom.h"
+#include "mt_eeprom.h"
 #include "wifi_task.h"
 
 #ifdef CONFIG_SOFTAP
@@ -189,6 +189,7 @@ wifiTASK_LowPrioTask (void)
 {
     uint32 CurTime = 0;
     static uint32 PreTime = 0;
+	static uint64 testcount=0;
 #if (ATCMD_RECOVERY_SUPPORT==1)
     static int32   RecCnt = 0;
 #endif
@@ -254,6 +255,7 @@ wifiTASK_LowPrioTask (void)
     cust_subtask();
 
     CurTime = iot_get_ms_time();
+	testcount++;
     if ((CurTime < PreTime) || (CurTime - PreTime) > (5*1000))  {
         /* Stay alive message, Print LOG per 5s */
         PreTime = CurTime;
@@ -264,7 +266,9 @@ wifiTASK_LowPrioTask (void)
         else
             printf_high("[RTask]%u \n", PreTime);
 #else
-        printf_high("[WTask]%u \n", PreTime);
+        printf_high("[WTask]%u %u \n", PreTime,testcount);
+		testcount=0;
+
 #endif
     }
 

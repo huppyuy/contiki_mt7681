@@ -2,7 +2,7 @@
 #include "string.h"
 #include "queue.h"
 #include "iot_api.h"
-#include "config.h"
+#include "mt_config.h"
 #ifdef CONFIG_SOFTAP
 #include "ap_pub.h"
 #endif

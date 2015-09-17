@@ -1,5 +1,5 @@
-#ifndef _LIST_H_
-#define _LIST_H_
+#ifndef _MT_LIST_H_
+#define _MT_LIST_H_
 /******************************************************************************
  * MODULE NAME:     list.h
  * PROJECT CODE:    __MT7681__
@@ -395,5 +395,5 @@ linkMoveTail (
     return;
 } /* end of linkMoveTail() */
 
-#endif /* _LIST_H_ */
+#endif /* _MT_LIST_H_ */
 

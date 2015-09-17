@@ -60,8 +60,8 @@
  *
  */
 
-#include "resolv.h"
-#include "uip.h"
+#include "mt_resolv.h"
+#include "mt_uip.h"
 
 #include <string.h>
 

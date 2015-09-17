@@ -43,10 +43,10 @@
  *
  * $Id: uip-fw.h,v 1.2 2006/06/12 08:00:30 adam Exp $
  */
-#ifndef __UIP_FW_H__
-#define __UIP_FW_H__
+#ifndef __MT_UIP_FW_H__
+#define __MT_UIP_FW_H__
 
-#include "uip.h"
+#include "mt_uip.h"
 
 /**
  * Representation of a uIP network interface.
@@ -171,6 +171,6 @@ void uip_fw_periodic(void);
 #define UIP_FW_DROPPED   5
 
 
-#endif /* __UIP_FW_H__ */
+#endif /* __MT_UIP_FW_H__ */
 
 /** @} */

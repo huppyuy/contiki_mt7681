@@ -33,7 +33,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "uip.h"
+#include "mt_uip.h"
 #include "dhcpd.h"
 
 #ifdef CONFIG_SOFTAP

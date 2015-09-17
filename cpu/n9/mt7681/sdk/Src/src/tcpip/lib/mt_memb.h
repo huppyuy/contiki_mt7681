@@ -63,8 +63,8 @@
  *
  */
 
-#ifndef __MEMB_H__
-#define __MEMB_H__
+#ifndef __MT_MEMB_H__
+#define __MT_MEMB_H__
 
 /*
  * Here we define a C preprocessing macro for concatenating to
@@ -139,4 +139,4 @@ char  memb_free(struct memb_blocks *m, void *ptr);
 
 /** @} */
 
-#endif /* __MEMB_H__ */
+#endif /* __MT_MEMB_H__ */

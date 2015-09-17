@@ -1,5 +1,5 @@
-#ifndef _RAND_H_
-#define _RAND_H_
+#ifndef _API_RAND_H_
+#define _API_RAND_H_
 /******************************************************************************
 * MODULE NAME:     rand.h
 * PROJECT CODE:    __MT7681__
@@ -32,5 +32,5 @@
  ******************************************************************************/
 OUT uint32 apiRand (void);
 
-#endif /* _RAND_H_ */
+#endif /* _API_RAND_H_ */
 

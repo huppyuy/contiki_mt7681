@@ -79,16 +79,16 @@
  * the packet back to the peer.
 */
 
-#include "uip.h"
-#include "uipopt.h"
-#include "uip_arch.h"
+#include "mt_uip.h"
+#include "mt_uipopt.h"
+#include "mt_uip_arch.h"
 
 #if UIP_CONF_IPV6
-#include "uip-neighbor.h"
+#include "mt_uip-neighbor.h"
 #endif /* UIP_CONF_IPV6 */
 
 #include <string.h>
-#include "dhcpc.h"
+#include "mt_dhcpc.h"
 
 /*---------------------------------------------------------------------------*/
 /* Variable definitions. */

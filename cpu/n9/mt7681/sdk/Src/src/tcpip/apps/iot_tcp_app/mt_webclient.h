@@ -44,12 +44,12 @@
  *
  */
 
-#ifndef __WEBCLIENT_H__
-#define __WEBCLIENT_H__
+#ifndef __MT_WEBCLIENT_H__
+#define __MT_WEBCLIENT_H__
 
 
 #include "webclient-strings.h"
-#include "uipopt.h"
+#include "mt_uipopt.h"
 
 #if (UIP_HTTP_CLIENT_SUPPORT || UIP_CLOUD_SERVER_SUPPORT)
 
@@ -230,5 +230,5 @@ void senddata(void) XIP_ATTRIBUTE(".xipsec0");
 
 #endif /*UIP_HTTP_CLIENT_SUPPORT || UIP_CLOUD_SERVER_SUPPORT*/
 
-#endif /* __WEBCLIENT_H__ */
+#endif /* __MT_WEBCLIENT_H__ */
 /** @} */

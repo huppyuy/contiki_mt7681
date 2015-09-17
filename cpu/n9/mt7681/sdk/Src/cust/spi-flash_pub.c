@@ -1,9 +1,9 @@
-#include <config.h>
+#include <mt_config.h>
 #include <types.h>
 #include <stdio.h>
 #include "flash_map.h"
 #include "iot_api.h"
-#include "eeprom.h"
+#include "mt_eeprom.h"
 
 /************************************************/
 /* Macros & Extern Parameter */

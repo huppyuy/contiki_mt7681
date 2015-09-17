@@ -1,4 +1,4 @@
-#include <config.h>
+#include <mt_config.h>
 #include <types.h>
 #include <stdlib.h>
 

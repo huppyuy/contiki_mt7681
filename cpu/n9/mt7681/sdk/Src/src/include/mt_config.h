@@ -1,6 +1,6 @@
 
-#ifndef   __CONFIG_H__
-#define   __CONFIG_H__
+#ifndef   __MT_CONFIG_H__
+#define   __MT_CONFIG_H__
 #include "xip_ovly.h"
 
 #define OS_ENABLE                0
@@ -27,4 +27,4 @@
 /* GPT timer list */
 #define GLOBAL_TIMER_SIZE   1                /* must be power of 2 */
 
-#endif
+#endif /* __MT_CONFIG_H__*/

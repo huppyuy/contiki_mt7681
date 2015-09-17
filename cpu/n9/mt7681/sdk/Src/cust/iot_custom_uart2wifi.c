@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "string.h"
 #include "types.h"
-#include "uart.h"
+#include "mt_uart.h"
 #include "iot_custom.h"
 #include "iot_api.h"
 #include "bmd.h"

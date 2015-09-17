@@ -2,7 +2,7 @@
 #include "string.h"
 #include "types.h"
 #include "iot_api.h"
-#include "config.h"
+#include "mt_config.h"
 #include "uip-conf.h"
 #include "iot_custom.h"
 

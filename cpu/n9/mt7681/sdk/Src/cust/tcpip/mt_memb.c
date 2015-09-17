@@ -46,7 +46,7 @@
 #include <string.h>
 
 #include <types.h>
-#include "memb.h"
+#include "mt_memb.h"
 
 /*---------------------------------------------------------------------------*/
 void

@@ -2,10 +2,10 @@
 #include "string.h"
 #include "types.h"
 #include "iot_api.h"
-#include "config.h"
+#include "mt_config.h"
 #include "flash_map.h"
 #include "uip-conf.h"
-#include "eeprom.h"
+#include "mt_eeprom.h"
 
 /******************************************************************************
 * MODULE NAME:     iot_parse.c

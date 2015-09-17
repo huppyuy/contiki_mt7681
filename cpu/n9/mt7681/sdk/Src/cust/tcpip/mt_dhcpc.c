@@ -32,10 +32,11 @@
  */
 #include <stdio.h>
 #include <string.h>
-#include "uip.h"
-#include "dhcpc.h"
+#include "mt_uip.h"
+#include "mt_dhcpc.h"
 #include "iot_api.h"
-#include "webclient.h"
+#include "mt_webclient.h"
+
 
 /*---------------------------------------------------------------------------*/
 /*to indicated wheter store the SMNT setting after Wifi Connected AP and Got IP*/

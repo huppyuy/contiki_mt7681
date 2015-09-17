@@ -45,7 +45,7 @@
  * $Id: timer.c,v 1.2 2006/06/12 08:00:30 adam Exp $
  */
 
-#include "clock.h"
+#include "mt_clock.h"
 #include "uip_timer.h"
 
 /*---------------------------------------------------------------------------*/

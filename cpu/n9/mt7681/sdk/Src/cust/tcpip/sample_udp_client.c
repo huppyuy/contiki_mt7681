@@ -1,4 +1,4 @@
-#include "uip.h"
+#include "mt_uip.h"
 #include "uip_timer.h"
 
 static struct timer udp_client_timer;

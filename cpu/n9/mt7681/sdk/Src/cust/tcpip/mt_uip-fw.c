@@ -53,9 +53,9 @@
  *
  */
 
-#include "uip.h"
-#include "uip_arch.h"
-#include "uip-fw.h"
+#include "mt_uip.h"
+#include "mt_uip_arch.h"
+#include "mt_uip-fw.h"
 
 #include <string.h> /* for memcpy() */
 

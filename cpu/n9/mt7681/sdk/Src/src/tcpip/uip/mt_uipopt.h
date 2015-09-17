@@ -57,8 +57,8 @@
  *
  */
 
-#ifndef __UIPOPT_H__
-#define __UIPOPT_H__
+#ifndef __MT_UIPOPT_H__
+#define __MT_UIPOPT_H__
 
 #ifndef UIP_LITTLE_ENDIAN
 #define UIP_LITTLE_ENDIAN  3412
@@ -567,4 +567,4 @@ typedef struct httpd_state uip_tcp_appstate_t
 /** @} */
 /** @} */
 
-#endif /* __UIPOPT_H__ */
+#endif /* __MT_UIPOPT_H__ */

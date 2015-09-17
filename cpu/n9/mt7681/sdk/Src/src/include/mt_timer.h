@@ -1,5 +1,5 @@
-#ifndef _TIMER_H_
-#define _TIMER_H_
+#ifndef _MT_TIMER_H_
+#define _MT_TIMER_H_
 
 
 
@@ -58,5 +58,5 @@ void sys_init_timer() XIP_ATTRIBUTE(".xipsec0");
 
 void kal_free_timer(void* timer_ptr);
 
-#endif /* _TIMER_H_ */
+#endif /* _MT_TIMER_H_ */
 

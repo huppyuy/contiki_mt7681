@@ -2,7 +2,7 @@
 #include "string.h"
 #include "types.h"
 #include "iot_api.h"
-#include "config.h"
+#include "mt_config.h"
 #include "flash_map.h"
 #include "uip-conf.h"
 #include "iot_custom.h"
@@ -155,7 +155,7 @@ void iot_cust_scan_done(void)
 ========================================================================*/
 void iot_cust_subtask1(void)
 {
-
+ 
 }
 
 /*========================================================================
@@ -181,7 +181,7 @@ void iot_cust_preinit(void)
 ========================================================================*/
 void iot_cust_init(void)
 {
-    printf_high("Hello world \n");
+    //printf_high("Hello world \n");
 }
 
 

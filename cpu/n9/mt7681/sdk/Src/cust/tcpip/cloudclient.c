@@ -1,6 +1,6 @@
 #include "uip-conf.h"
-#include "uip.h"
-#include "webclient.h"
+#include "mt_uip.h"
+#include "mt_webclient.h"
 #include "cloudclient.h"
 #include "iot_api.h"
 #include "crypt_md5.h"

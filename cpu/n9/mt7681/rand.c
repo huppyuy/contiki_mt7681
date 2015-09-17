@@ -1,7 +1,9 @@
+//#include "api_random.h"
+
 int
 rand(void)
 {
-  return 0;
+  return (int)apiRand();
 }
 /*--------------------------------------------------------------------------*/
 /*

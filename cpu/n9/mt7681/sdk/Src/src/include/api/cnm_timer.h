@@ -1,9 +1,9 @@
 #ifndef _CNM_TIMER_H
 #define _CNM_TIMER_H
 
-#include "assert.h"
-#include "timer.h"
-#include "config.h"
+#include "mt_assert.h"
+#include "mt_timer.h"
+#include "mt_config.h"
 
 /*******************************************************************************
 *                              C O N S T A N T S

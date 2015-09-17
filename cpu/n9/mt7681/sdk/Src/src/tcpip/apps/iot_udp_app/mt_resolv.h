@@ -41,10 +41,10 @@
  * $Id: resolv.h,v 1.4 2006/06/11 21:46:37 adam Exp $
  *
  */
-#ifndef __RESOLV_H__
-#define __RESOLV_H__
+#ifndef __MT_RESOLV_H__
+#define __MT_RESOLV_H__
 
-#include "uipopt.h"
+#include "mt_uipopt.h"
 #define DNS_SERVER_PORT 53
 
 #if 1 //CFG_SUPPORT_DNS
@@ -73,6 +73,6 @@ void resolv_newdata(void);
 void resolv_check_entries(void);
 #endif /*CFG_SUPPORT_DNS*/
 
-#endif /* __RESOLV_H__ */
+#endif /* __MT_RESOLV_H__ */
 
 /** @} */
