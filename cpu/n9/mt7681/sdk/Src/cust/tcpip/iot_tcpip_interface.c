@@ -79,7 +79,7 @@ int iot_connect(u8_t *dst, u16_t port)
         return -1;
     }
 
-    conn = uip_connect(&ip, htons(port));
+    conn = mt_uip_connect(&ip, htons(port));
     if (conn != NULL) {
         return conn->fd;
     } else {
@@ -113,8 +113,8 @@ int iot_send(u8_t fd, u8_t *buf, u16_t len)
         s->len = len;
         s->state = IOT_APP_S_WAIT_SEND;
         uip_poll_conn(&uip_conns[fd]);
-        if (uip_len > 0) {
-            uip_arp_out();
+        if (mt_uip_len > 0) {
+            mt_uip_arp_out();
             mt76xx_dev_send();
         }
 
@@ -123,7 +123,7 @@ int iot_send(u8_t fd, u8_t *buf, u16_t len)
 }
 int iot_listen (u16_t port)
 {
-    uip_listen(HTONS(port));
+    mt_uip_listen(HTONS(port));
     return 0;
 }
 
@@ -142,9 +142,9 @@ int iot_udp_new(u8_t *rip, u16_t lport, u16_t rport)
         if (uiplib_ipaddrconv((char *)rip,(unsigned char *)&addr) == 0) {
             return -1;
         }
-        udp_conn = uip_udp_new(&addr, HTONS(rport));
+        udp_conn = mt_uip_udp_new(&addr, HTONS(rport));
     } else {
-        udp_conn = uip_udp_new(NULL, HTONS(rport));
+        udp_conn = mt_uip_udp_new(NULL, HTONS(rport));
     }
 
     if (udp_conn != NULL) {
@@ -176,8 +176,8 @@ int iot_udp_send(u8_t fd, u8_t *buf, u16_t len, u8_t *rip, u16_t rport)
     udp_app_state.rport = rport;
     uip_udp_poll(udp_conn);
 
-    if (uip_len > 0) {
-        uip_arp_out();
+    if (mt_uip_len > 0) {
+        mt_uip_arp_out();
         mt76xx_dev_send();
     }
 

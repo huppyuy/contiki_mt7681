@@ -33,7 +33,7 @@ void resolv_usage_init(u16_t *rip, u16_t rport)
 {
     UIP_CONN *udp_conn=NULL;
 
-    udp_conn = uip_udp_new(rip, HTONS(rport));
+    udp_conn = mt_uip_udp_new(rip, HTONS(rport));
     if (udp_conn) {
         uip_udp_bind(udp_conn, HTONS(8888));
     }

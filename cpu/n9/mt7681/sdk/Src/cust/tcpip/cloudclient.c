@@ -264,7 +264,7 @@ uint16 cloud_client_resp_apk(uint16 ret) {
         pointer += 2;
     }
     *pointer = '\0';
-    uip_send(outHexString, strlen(outHexString));
+    mt_uip_send(outHexString, strlen(outHexString));
     return 0;
 }
 
@@ -280,7 +280,7 @@ uint8 cloud_tcp_connect(char *host, uint16 port) {
             return 0;
         }
     }
-    conn = uip_connect(ipaddr, htons(port));
+    conn = mt_uip_connect(ipaddr, htons(port));
     if (conn == NULL) {
         Cloud_Debug("cloud client connect fail!\n");
         return 0;
@@ -288,7 +288,7 @@ uint8 cloud_tcp_connect(char *host, uint16 port) {
         TCP_cloudClientPort = (uint16)iot_get_ms_time();
         conn->lport = htons(TCP_cloudClientPort);
     }
-    uip_listen(HTONS(TCP_cloudClientPort));
+    mt_uip_listen(HTONS(TCP_cloudClientPort));
     return 1;
 }
 
@@ -657,7 +657,7 @@ void cloud_client_send_keepalive(void) {
     uint8 output[16] = {0};
     uint32 len, outputLen = 16;
     Cloud_Debug("send keepalive packet,time:%d, mt76xx_Connection.SendSeqID:%d\n", iot_get_ms_time(), mt76xx_Connection.SendSeqID);
-    cptr = (char *)uip_appdata;
+    cptr = (char *)mt_uip_appdata;
     if (mt76xx_Connection.FirstSendKeepAlive)
         cloud_client_ctr_header(cptr, MANAGEMENT, KEEP_ALIVE_SEND, 0);
     else
@@ -673,7 +673,7 @@ void cloud_client_send_keepalive(void) {
     else
         keepAlivePeriod = 80;
     len = CTRHEADER_NOENCRYPT_LEN+outputLen;
-    uip_send(uip_appdata, len);
+    mt_uip_send(mt_uip_appdata, len);
 }
 
 void cloud_client_gpio_autoupdate(void) {
@@ -681,14 +681,14 @@ void cloud_client_gpio_autoupdate(void) {
     uint8 output[32] = {0};
     uint32 len, inputLen, outputLen = 32;
     printf("gpio auto update packet,time:%d\n", GetMsTimer());
-    cptr = (char *)uip_appdata;
+    cptr = (char *)mt_uip_appdata;
     cloud_client_ctr_header(cptr, FUNCTION, AUTO_UPDATE, ++mt76xx_Connection.SendSeqID);
     cloud_client_ctr_body(cptr+sizeof(CloudClientCtrlHeader), AUTO_UPDATE);
     inputLen = sizeof(CloudClientCtrlHeader)-CTRHEADER_NOENCRYPT_LEN+CP_DATA_HDR_LEN+sizeof(GPIO_Information);
     cloud_client_server_encrypt(cptr+CTRHEADER_NOENCRYPT_LEN,inputLen,output,&outputLen);
     memcpy(cptr+CTRHEADER_NOENCRYPT_LEN, output, outputLen);
     len = CTRHEADER_NOENCRYPT_LEN+outputLen;
-    uip_send(uip_appdata, len);
+    mt_uip_send(mt_uip_appdata, len);
 }
 
 void cloud_client_uart_autoupdate(void) {
@@ -705,7 +705,7 @@ void cloud_client_uart_autoupdate(void) {
         rx_len = uart_len>64?64:uart_len;
         for (i=0; i<rx_len; i++)
             pCmdBuf[i] = uart_rb_pop();
-        cptr = (char *)uip_appdata;
+        cptr = (char *)mt_uip_appdata;
         Cloud_Debug("cloud_client_uart_autoupdate,pCmdBuf:%s\n", pCmdBuf);
         //dump(pCmdBuf, rx_len);
         cloud_client_ctr_header(cptr, FUNCTION, AUTO_UPDATE, ++mt76xx_Connection.SendSeqID);
@@ -718,7 +718,7 @@ void cloud_client_uart_autoupdate(void) {
         cloud_client_server_encrypt(cptr+CTRHEADER_NOENCRYPT_LEN,inputLen,output,&outputLen);
         memcpy(cptr+CTRHEADER_NOENCRYPT_LEN, output, outputLen);
         len = CTRHEADER_NOENCRYPT_LEN+outputLen;
-        uip_send(uip_appdata, len);
+        mt_uip_send(mt_uip_appdata, len);
     }
 }
 
@@ -740,7 +740,7 @@ void cloud_client_fota_autoupdate(void) {
     }
     Cloud_Debug("FOTA auto update packet,MajorVersion:%d,MinorVersion:%d\n", version[0],version[1]);
     if ((fData[0] == 0) || (fData[0] == 1)) {
-        cptr = (char *)uip_appdata;
+        cptr = (char *)mt_uip_appdata;
         cloud_client_ctr_header(cptr, FUNCTION, AUTO_UPDATE, ++mt76xx_Connection.SendSeqID);
         Dataheader = (DataHeader*)(cptr+sizeof(CloudClientCtrlHeader));
         Dataheader->Type = FOTA_INFO;
@@ -757,7 +757,7 @@ void cloud_client_fota_autoupdate(void) {
     cloud_client_server_encrypt(cptr+CTRHEADER_NOENCRYPT_LEN,inputLen,output,&outputLen);
     memcpy(cptr+CTRHEADER_NOENCRYPT_LEN, output, outputLen);
     len = CTRHEADER_NOENCRYPT_LEN+outputLen;
-    uip_send(uip_appdata, len);
+    mt_uip_send(mt_uip_appdata, len);
 }
 
 void cloud_client_resp_state(uint8 type, uint8 subtype,uint16 dataType,uint16 dataLen,uint8* result) {
@@ -766,7 +766,7 @@ void cloud_client_resp_state(uint8 type, uint8 subtype,uint16 dataType,uint16 da
     uint32 len, inputLen, outputLen = 32;
     DataHeader* Dataheader;
     uint8 *data;
-    cptr = (char *)uip_appdata;
+    cptr = (char *)mt_uip_appdata;
     cloud_client_ctr_header(cptr, type, subtype, mt76xx_Connection.ReceiveSeqID);
     Dataheader = (DataHeader*)(cptr+sizeof(CloudClientCtrlHeader));
     Dataheader->Type = dataType;
@@ -777,7 +777,7 @@ void cloud_client_resp_state(uint8 type, uint8 subtype,uint16 dataType,uint16 da
     cloud_client_server_encrypt(cptr+CTRHEADER_NOENCRYPT_LEN,inputLen,output,&outputLen);
     memcpy(cptr+CTRHEADER_NOENCRYPT_LEN, output, outputLen);
     len = CTRHEADER_NOENCRYPT_LEN+outputLen;
-    uip_send(uip_appdata, len);
+    mt_uip_send(mt_uip_appdata, len);
 }
 
 uint32 cloud_client_function_packet(DataHeader* Dataheader, uint8 subType) {
@@ -1069,7 +1069,7 @@ void cloudClient_tcpAppcall(void) {
         //acked();
     }
     if (uip_newdata()) {
-        cloud_client_data_handler((char *)uip_appdata, uip_datalen());
+        cloud_client_data_handler((char *)mt_uip_appdata, uip_datalen());
         return;
     }
     if (uip_rexmit()) {

@@ -57,7 +57,7 @@ iot_udp_app_init(void)
 void
 iot_udp_appcall(void)
 {
-    UIP_UDP_CONN *udp_conn = uip_udp_conn;
+    UIP_UDP_CONN *udp_conn = mt_uip_udp_conn;
     u16_t lport, rport;
 
     lport=HTONS(udp_conn->lport);

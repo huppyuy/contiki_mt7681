@@ -80,7 +80,7 @@ _tcpip_init(void)
     timer_set(&cli_timer, CLOCK_SECOND);
 
     mt76xx_dev_init();
-    uip_init();
+    mt_uip_init();
 
 #ifdef CONFIG_SOFTAP
     uip_ipaddr(ipaddr, UIP_IPADDR0,UIP_IPADDR1,UIP_IPADDR2,UIP_IPADDR3);
@@ -138,23 +138,23 @@ int netif_rx(u8_t *p, u16_t len)
         return -1;
     }
 
-    if (uip_len > 0) {
+    if (mt_uip_len > 0) {
         if (BUF->type == htons(UIP_ETHTYPE_IP)) {
             uip_arp_ipin();
             uip_input();
             /* If the above function invocation resulted in data that
             should be sent out on the network, the global variable
             uip_len is set to a value > 0. */
-            if (uip_len > 0) {
-                uip_arp_out();
+            if (mt_uip_len > 0) {
+                mt_uip_arp_out();
                 mt76xx_dev_send();
             }
         } else if (BUF->type == htons(UIP_ETHTYPE_ARP)) {
-            uip_arp_arpin();
+            mt_uip_arp_arpin();
             /* If the above function invocation resulted in data that
             should be sent out on the network, the global variable
             uip_len is set to a value > 0. */
-            if (uip_len > 0) {
+            if (mt_uip_len > 0) {
                 mt76xx_dev_send();
             }
         }
@@ -173,8 +173,8 @@ void tcpip_periodic_timer()
             /* If the above function invocation resulted in data that
             should be sent out on the network, the global variable
             uip_len is set to a value > 0. */
-            if (uip_len > 0) {
-                uip_arp_out();
+            if (mt_uip_len > 0) {
+                mt_uip_arp_out();
                 mt76xx_dev_send();
             }
         }
@@ -184,9 +184,9 @@ void tcpip_periodic_timer()
             uip_udp_periodic(i);
             /* If the above function invocation resulted in data that
             should be sent out on the network, the global variable
-            uip_len is set to a value > 0. */
-            if (uip_len > 0) {
-                uip_arp_out();
+            mt_uip_len is set to a value > 0. */
+            if (mt_uip_len > 0) {
+                mt_uip_arp_out();
                 mt76xx_dev_send();
             }
         }
@@ -195,7 +195,7 @@ void tcpip_periodic_timer()
         /* Call the ARP timer function every 10 seconds. */
         if (timer_expired(&arp_timer)) {
             timer_reset(&arp_timer);
-            uip_arp_timer();
+            mt_uip_arp_timer();
         }
 		
 #if UIP_CLOUD_SERVER_SUPPORT
@@ -214,7 +214,7 @@ void tcpip_periodic_timer()
 
             uip_ipaddr(srv_ip, IoTpAd.ComCfg.IoT_ServeIP[0], IoTpAd.ComCfg.IoT_ServeIP[1],
                        IoTpAd.ComCfg.IoT_ServeIP[2], IoTpAd.ComCfg.IoT_ServeIP[3]);
-            conn = uip_connect(&srv_ip, HTONS(IoTpAd.ComCfg.IoT_TCP_Srv_Port));
+            conn = mt_uip_connect(&srv_ip, HTONS(IoTpAd.ComCfg.IoT_TCP_Srv_Port));
             if (conn) {
                 conn->lport = HTONS(7682);
                 cli_fd = conn->fd;

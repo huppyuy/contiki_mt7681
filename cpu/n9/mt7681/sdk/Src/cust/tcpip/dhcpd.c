@@ -140,7 +140,7 @@ static int discover()    XIP_ATTRIBUTE(".xipsec0");
 
 static int discover()
 {
-    struct dhcpd *oldpacket = (struct dhcpd *)uip_appdata;
+    struct dhcpd *oldpacket = (struct dhcpd *)mt_uip_appdata;
     struct dhcpd packet;
 
     in_addr addr = {0};
@@ -233,7 +233,7 @@ static int discover()
     *optptr++ = DHCP_OPTION_END;
 
     printf("Send. [%d] data\n", sizeof(struct dhcpd)-308+(optptr-(unsigned char* )packet.options));
-    uip_send(&packet,  sizeof(struct dhcpd)-308+(optptr-(unsigned char* )packet.options));
+    mt_uip_send(&packet,  sizeof(struct dhcpd)-308+(optptr-(unsigned char* )packet.options));
 
     return 1;
 }
@@ -274,7 +274,7 @@ static int request()    XIP_ATTRIBUTE(".xipsec0");
 
 static int request()
 {
-    struct dhcpd *oldpacket = (struct dhcpd *)uip_appdata;
+    struct dhcpd *oldpacket = (struct dhcpd *)mt_uip_appdata;
     unsigned char *requested;
     unsigned char *server_id;
 
@@ -406,7 +406,7 @@ static int request()
     memcpy(&packet.yiaddr,  &addr,  sizeof(addr));
 
     //send NAK or ACK
-    uip_send(&packet,sizeof(struct dhcpd)-308+(optptr-(unsigned char* )packet.options));
+    mt_uip_send(&packet,sizeof(struct dhcpd)-308+(optptr-(unsigned char* )packet.options));
 
     /*jinchuan. bao  for debug*/
     for (j=0; j<UIP_DHCPD_CONNS; j++) {
@@ -430,7 +430,7 @@ static int request()
 void
 handle_dhcpd(void)
 {
-    struct dhcpd *oldpacket = (struct dhcpd *)uip_appdata;
+    struct dhcpd *oldpacket = (struct dhcpd *)mt_uip_appdata;
     unsigned char *msg_type = NULL;
     unsigned char state;
     u8_t i=0;
@@ -480,7 +480,7 @@ dhcpd_init()
     memset(uip_dhpcd_conns,0,sizeof(uip_dhpcd_conns));
 
     uip_ipaddr(Remoteaddr, 255,255,255,255);
-    udp_conn = uip_udp_new(&Remoteaddr, HTONS(DHCPC_CLIENT_PORT));
+    udp_conn = mt_uip_udp_new(&Remoteaddr, HTONS(DHCPC_CLIENT_PORT));
     if (udp_conn)
         uip_udp_bind(udp_conn, HTONS(DHCPC_SERVER_PORT));
 

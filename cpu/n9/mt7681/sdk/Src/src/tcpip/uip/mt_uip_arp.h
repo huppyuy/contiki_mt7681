@@ -73,7 +73,7 @@ struct uip_eth_hdr {
 
 /* The uip_arp_init() function must be called before any of the other
    ARP functions. */
-void uip_arp_init(void);
+void mt_uip_arp_init(void);
 
 /* The uip_arp_ipin() function should be called whenever an IP packet
    arrives from the Ethernet. This function refreshes the ARP table or
@@ -83,15 +83,15 @@ void uip_arp_init(void);
 /*void uip_arp_ipin(void);*/
 #define uip_arp_ipin()
 
-/* The uip_arp_arpin() should be called when an ARP packet is received
+/* The mt_uip_arp_arpin() should be called when an ARP packet is received
    by the Ethernet driver. This function also assumes that the
    Ethernet frame is present in the uip_buf buffer. When the
-   uip_arp_arpin() function returns, the contents of the uip_buf
+   mt_uip_arp_arpin() function returns, the contents of the uip_buf
    buffer should be sent out on the Ethernet if the uip_len variable
    is > 0. */
-void uip_arp_arpin(void);
+void mt_uip_arp_arpin(void);
 
-/* The uip_arp_out() function should be called when an IP packet
+/* The mt_uip_arp_out() function should be called when an IP packet
    should be sent out on the Ethernet. This function creates an
    Ethernet header before the IP header in the uip_buf buffer. The
    Ethernet header will have the correct Ethernet MAC destination
@@ -101,11 +101,11 @@ void uip_arp_arpin(void);
    request and we rely on TCP to retransmit the packet that was
    overwritten. In any case, the uip_len variable holds the length of
    the Ethernet frame that should be transmitted. */
-void uip_arp_out(void);
+void mt_uip_arp_out(void);
 
-/* The uip_arp_timer() function should be called every ten seconds. It
+/* The mt_uip_arp_timer() function should be called every ten seconds. It
    is responsible for flushing old entries in the ARP table. */
-void uip_arp_timer(void);
+void mt_uip_arp_timer(void);
 
 /** @} */
 

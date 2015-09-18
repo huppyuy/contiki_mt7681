@@ -12,7 +12,7 @@ void udp_srv_app1_init()
 
     /* We don't specify a remote address and a remote port,
        that means we can receive data from any address. */
-    udp_conn = uip_udp_new(NULL, HTONS(UDP_SRV_APP1_REMOTE_PORT));
+    udp_conn = mt_uip_udp_new(NULL, HTONS(UDP_SRV_APP1_REMOTE_PORT));
     if (udp_conn) {
         /* Bind to local 7682 port. */
         uip_udp_bind(udp_conn, HTONS(UDP_SRV_APP1_LOCAL_PORT));
@@ -24,7 +24,7 @@ void handle_udp_srv_app1()
     u8_t addr[48] = {0};
     u8_t ipStrMaxLen = 16,strTotLen = 0;
     uip_ipaddr_t ip;
-    UIP_UDP_CONN *udp_conn = uip_udp_conn;
+    UIP_UDP_CONN *udp_conn = mt_uip_udp_conn;
 
     if (uip_newdata()) {
         /* Here shows how to get the peer info of the received data. */
@@ -35,10 +35,10 @@ void handle_udp_srv_app1()
                 uip_ipaddr4(udp_conn->ripaddr));
 
         printf("UDP Sample server RX: lp:%d,ra:%s,rp:%d,  got:%s\n",
-               HTONS(udp_conn->lport), addr, HTONS(udp_conn->rport), uip_appdata);
+               HTONS(udp_conn->lport), addr, HTONS(udp_conn->rport), mt_uip_appdata);
 
         /* uip_appdata is a pointer pointed the received data. */
-        if (!memcmp(uip_appdata, "ip", 2)) {
+        if (!memcmp(mt_uip_appdata, "ip", 2)) {
             uip_gethostaddr(&ip);
 #if UIP_CLOUD_SERVER_SUPPORT
             strTotLen = ipStrMaxLen + 2 + strlen(productID);
@@ -55,7 +55,7 @@ void handle_udp_srv_app1()
               uip_ipaddr3(ip), uip_ipaddr4(ip));
             }
 #endif
-            uip_send(addr, sizeof(addr));
+            mt_uip_send(addr, sizeof(addr));
         }
     }
 
@@ -76,7 +76,7 @@ void udp_srv_app2_init(void)
 
     /* We don't specify a remote address and a remote port,
        that means we can receive data from any address. */
-    udp_conn = uip_udp_new(NULL, HTONS(UDP_SRV_APP2_REMOTE_PORT));
+    udp_conn = mt_uip_udp_new(NULL, HTONS(UDP_SRV_APP2_REMOTE_PORT));
     if (udp_conn) {
         /* Bind to local port. */
         uip_udp_bind(udp_conn, HTONS(UDP_SRV_APP2_LOCAL_PORT));
@@ -85,7 +85,7 @@ void udp_srv_app2_init(void)
 
 void handle_udp_srv_app2(void)
 {
-    UIP_UDP_CONN *udp_conn = uip_udp_conn;
+    UIP_UDP_CONN *udp_conn = mt_uip_udp_conn;
     u16_t lport, rport;
     u8_t addr[16] = {0};
     uip_ipaddr_t ip;
@@ -111,7 +111,7 @@ void handle_udp_srv_app2(void)
                 uip_ipaddr3(udp_conn->ripaddr), uip_ipaddr4(udp_conn->ripaddr));
 
         printf_high("UDP Sample server RX:  LocalPort[%d],RemoteMACAddress[%s], RemotePort[%d], Data[%s]\n",
-                    HTONS(udp_conn->lport), addr, HTONS(udp_conn->rport), uip_appdata);
+                    HTONS(udp_conn->lport), addr, HTONS(udp_conn->rport), mt_uip_appdata);
 
         printf_high("HostIP: %d.%d.%d.%d \n",
                     uip_ipaddr1(ip), uip_ipaddr2(ip), uip_ipaddr3(ip), uip_ipaddr4(ip));

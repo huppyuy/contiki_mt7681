@@ -92,7 +92,7 @@ typedef unsigned short uip_stats_t;
  *
  * \hideinitializer
  */
-#define UIP_CONF_MAX_CONNECTIONS 6
+#define UIP_CONF_MAX_CONNECTIONS 0
 
 /**
  * Maximum number of listening TCP ports.
@@ -100,16 +100,16 @@ typedef unsigned short uip_stats_t;
  * \hideinitializer
  */
 #if CFG_SUPPORT_TCPIP_ROBUST_TEST
-#define UIP_CONF_MAX_LISTENPORTS 2
+#define UIP_CONF_MAX_LISTENPORTS 0
 #else
-#define UIP_CONF_MAX_LISTENPORTS 6 //Jody for more connections
+#define UIP_CONF_MAX_LISTENPORTS 0 //Jody for more connections
 #endif
 /**
  * Maximum number of UDP connections..
  *
  * \hideinitializer
  */
-#define UIP_CONF_UDP_CONNS  6
+#define UIP_CONF_UDP_CONNS  2
 
 
 /**

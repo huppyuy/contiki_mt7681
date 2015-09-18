@@ -87,7 +87,7 @@ typedef struct _UIP_UDP_CONN {
 /**
  * The current UDP connection.
  */
-extern UIP_UDP_CONN *uip_udp_conn;
+extern UIP_UDP_CONN *mt_uip_udp_conn;
 extern UIP_UDP_CONN uip_udp_conns[UIP_UDP_CONNS];
 #endif /* UIP_UDP */
 
@@ -95,7 +95,7 @@ extern UIP_UDP_CONN uip_udp_conns[UIP_UDP_CONNS];
 /**
  * Representation of a uIP TCP connection.
  *
- * The uip_conn structure is used for identifying a connection. All
+ * The mt_uip_conn structure is used for identifying a connection. All
  * but one field in the structure are to be considered read-only by an
  * application. The only exception is the appstate field whos purpose
  * is to let the application store application-specific state (e.g.,
@@ -253,14 +253,14 @@ typedef struct _UIP_CONN {
  * This function should be called at boot up to initilize the uIP
  * TCP/IP stack.
  */
-void uip_init(void) XIP_ATTRIBUTE(".xipsec1");
+void mt_uip_init(void) XIP_ATTRIBUTE(".xipsec1");
 
 /**
  * uIP initialization function.
  *
  * This function may be used at boot time to set the initial ip_id.
  */
-void uip_setipid(u16_t id);
+void mt_uip_setipid(u16_t id);
 
 /** @} */
 
@@ -309,11 +309,11 @@ void uip_setipid(u16_t id);
       uip_arp_ipin();
       uip_input();
       if(uip_len > 0) {
-        uip_arp_out();
+        mt_uip_arp_out();
     ethernet_devicedriver_send();
       }
     } else if(BUF->type == HTONS(UIP_ETHTYPE_ARP)) {
-      uip_arp_arpin();
+      mt_uip_arp_arpin();
       if(uip_len > 0) {
     ethernet_devicedriver_send();
       }
@@ -322,7 +322,7 @@ void uip_setipid(u16_t id);
  *
  * \hideinitializer
  */
-#define uip_input()        uip_process(UIP_DATA)
+#define uip_input()        mt_uip_process(UIP_DATA)
 
 /**
  * Periodic processing for a connection identified by its number.
@@ -350,13 +350,13 @@ void uip_setipid(u16_t id);
  *
  * \note If you are writing a uIP device driver that needs ARP
  * (Address Resolution Protocol), e.g., when running uIP over
- * Ethernet, you will need to call the uip_arp_out() function before
+ * Ethernet, you will need to call the mt_uip_arp_out() function before
  * calling the device driver:
  \code
   for(i = 0; i < UIP_CONNS; ++i) {
     uip_periodic(i);
     if(uip_len > 0) {
-      uip_arp_out();
+      mt_uip_arp_out();
       ethernet_devicedriver_send();
     }
   }
@@ -366,8 +366,8 @@ void uip_setipid(u16_t id);
  *
  * \hideinitializer
  */
-#define uip_periodic(conn) do { uip_conn = &uip_conns[conn]; \
-                                uip_process(UIP_TIMER); } while (0)
+#define uip_periodic(conn) do { mt_uip_conn = &uip_conns[conn]; \
+                                mt_uip_process(UIP_TIMER); } while (0)
 
 /**
  *
@@ -379,17 +379,17 @@ void uip_setipid(u16_t id);
  * Perform periodic processing for a connection identified by a pointer
  * to its structure.
  *
- * Same as uip_periodic() but takes a pointer to the actual uip_conn
+ * Same as uip_periodic() but takes a pointer to the actual mt_uip_conn
  * struct instead of an integer as its argument. This function can be
  * used to force periodic processing of a specific connection.
  *
- * \param conn A pointer to the uip_conn struct for the connection to
+ * \param conn A pointer to the mt_uip_conn struct for the connection to
  * be processed.
  *
  * \hideinitializer
  */
-#define uip_periodic_conn(conn) do { uip_conn = conn; \
-                                     uip_process(UIP_TIMER); } while (0)
+#define uip_periodic_conn(conn) do { mt_uip_conn = conn; \
+                                     mt_uip_process(UIP_TIMER); } while (0)
 
 /**
  * Reuqest that a particular connection should be polled.
@@ -397,13 +397,13 @@ void uip_setipid(u16_t id);
  * Similar to uip_periodic_conn() but does not perform any timer
  * processing. The application is polled for new data.
  *
- * \param conn A pointer to the uip_conn struct for the connection to
+ * \param conn A pointer to the mt_uip_conn struct for the connection to
  * be processed.
  *
  * \hideinitializer
  */
-#define uip_poll_conn(conn) do { uip_conn = conn; \
-                                 uip_process(UIP_POLL_REQUEST); } while (0)
+#define uip_poll_conn(conn) do { mt_uip_conn = conn; \
+                                 mt_uip_process(UIP_POLL_REQUEST); } while (0)
 
 
 #if UIP_UDP
@@ -428,7 +428,7 @@ void uip_setipid(u16_t id);
   for(i = 0; i < UIP_UDP_CONNS; i++) {
     uip_udp_periodic(i);
     if(uip_len > 0) {
-      uip_arp_out();
+      mt_uip_arp_out();
       ethernet_devicedriver_send();
     }
   }
@@ -438,29 +438,29 @@ void uip_setipid(u16_t id);
  *
  * \hideinitializer
  */
-#define uip_udp_periodic(conn) do { uip_udp_conn = &uip_udp_conns[conn]; \
-                                uip_process(UIP_UDP_TIMER); } while (0)
+#define uip_udp_periodic(conn) do { mt_uip_udp_conn = &uip_udp_conns[conn]; \
+                                mt_uip_process(UIP_UDP_TIMER); } while (0)
 
 /**
  * Periodic processing for a UDP connection identified by a pointer to
  * its structure.
  *
  * Same as uip_udp_periodic() but takes a pointer to the actual
- * uip_conn struct instead of an integer as its argument. This
+ * mt_uip_conn struct instead of an integer as its argument. This
  * function can be used to force periodic processing of a specific
  * connection.
  *
- * \param conn A pointer to the uip_udp_conn struct for the connection
+ * \param conn A pointer to the mt_uip_udp_conn struct for the connection
  * to be processed.
  *
  * \hideinitializer
  */
-#define uip_udp_periodic_conn(conn) do { uip_udp_conn = conn; \
-                                         uip_process(UIP_UDP_TIMER); } while (0)
+#define uip_udp_periodic_conn(conn) do { mt_uip_udp_conn = conn; \
+                                         mt_uip_process(UIP_UDP_TIMER); } while (0)
 
 
-#define uip_udp_poll(conn) do { uip_udp_conn = conn; \
-                                        uip_process(UIP_UDP_SEND_CONN); } while (0)
+#define uip_udp_poll(conn) do { mt_uip_udp_conn = conn; \
+                                        mt_uip_process(UIP_UDP_SEND_CONN); } while (0)
 
 
 #endif /* UIP_UDP */
@@ -514,12 +514,12 @@ extern u8_t uip_buf[UIP_BUFSIZE+2];
  * order, a conversion using HTONS() or htons() is necessary.
  *
  \code
- uip_listen(HTONS(80));
+ mt_uip_listen(HTONS(80));
  \endcode
  *
  * \param port A 16-bit port number in network byte order.
  */
-void uip_listen(u16_t port) XIP_ATTRIBUTE(".xipsec1");
+void mt_uip_listen(u16_t port) XIP_ATTRIBUTE(".xipsec1");
 
 /**
  * Stop listening to the specified port.
@@ -533,7 +533,7 @@ void uip_listen(u16_t port) XIP_ATTRIBUTE(".xipsec1");
  *
  * \param port A 16-bit port number in network byte order.
  */
-void uip_unlisten(u16_t port) XIP_ATTRIBUTE(".xipsec1");
+void mt_uip_unlisten(u16_t port) XIP_ATTRIBUTE(".xipsec1");
 
 /**
  * Connect to a remote host using TCP.
@@ -544,7 +544,7 @@ void uip_unlisten(u16_t port) XIP_ATTRIBUTE(".xipsec1");
  * retransmission timer to 0. This will cause a TCP SYN segment to be
  * sent out the next time this connection is periodically processed,
  * which usually is done within 0.5 seconds after the call to
- * uip_connect().
+ * mt_uip_connect().
  *
  * \note This function is avaliable only if support for active open
  * has been configured by defining UIP_ACTIVE_OPEN to 1 in uipopt.h.
@@ -556,7 +556,7 @@ void uip_unlisten(u16_t port) XIP_ATTRIBUTE(".xipsec1");
  uip_ipaddr_t ipaddr;
 
  uip_ipaddr(&ipaddr, 192,168,1,2);
- uip_connect(&ipaddr, HTONS(80));
+ mt_uip_connect(&ipaddr, HTONS(80));
  \endcode
  *
  * \param ripaddr The IP address of the remote hot.
@@ -567,7 +567,7 @@ void uip_unlisten(u16_t port) XIP_ATTRIBUTE(".xipsec1");
  * or NULL if no connection could be allocated.
  *
  */
-PUIP_CONN uip_connect(uip_ipaddr_t *ripaddr, u16_t port) XIP_ATTRIBUTE(".xipsec1");
+PUIP_CONN mt_uip_connect(uip_ipaddr_t *ripaddr, u16_t port) XIP_ATTRIBUTE(".xipsec1");
 
 
 
@@ -576,7 +576,7 @@ PUIP_CONN uip_connect(uip_ipaddr_t *ripaddr, u16_t port) XIP_ATTRIBUTE(".xipsec1
  *
  * Check if a connection has outstanding (i.e., unacknowledged) data.
  *
- * \param conn A pointer to the uip_conn structure for the connection.
+ * \param conn A pointer to the mt_uip_conn structure for the connection.
  *
  * \hideinitializer
  */
@@ -607,7 +607,7 @@ PUIP_CONN uip_connect(uip_ipaddr_t *ripaddr, u16_t port) XIP_ATTRIBUTE(".xipsec1
  *
  * \hideinitializer
  */
-void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
+void mt_uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
 
 
 /**
@@ -620,7 +620,7 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  * \hideinitializer
  */
 /*void uip_datalen(void);*/
-#define uip_datalen()       uip_len
+#define uip_datalen()       mt_uip_len
 
 /**
  * The length of any out-of-band data (urgent data) that has arrived
@@ -640,7 +640,7 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  *
  * \hideinitializer
  */
-#define uip_close()         (uip_flags = UIP_CLOSE)
+#define uip_close()         (mt_uip_flags = UIP_CLOSE)
 
 /**
  * Abort the current connection.
@@ -651,7 +651,7 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  *
  * \hideinitializer
  */
-#define uip_abort()         (uip_flags = UIP_ABORT)
+#define uip_abort()         (mt_uip_flags = UIP_ABORT)
 
 /**
  * Tell the sending host to stop sending data.
@@ -661,7 +661,7 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  *
  * \hideinitializer
  */
-#define uip_stop()          (uip_conn->tcpstateflags |= UIP_STOPPED)
+#define uip_stop()          (mt_uip_conn->tcpstateflags |= UIP_STOPPED)
 
 /**
  * Find out if the current connection has been previously stopped with
@@ -680,8 +680,8 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  *
  * \hideinitializer
  */
-#define uip_restart()         do { uip_flags |= UIP_NEWDATA; \
-                                   uip_conn->tcpstateflags &= ~UIP_STOPPED; \
+#define uip_restart()         do { mt_uip_flags |= UIP_NEWDATA; \
+                                   mt_uip_conn->tcpstateflags &= ~UIP_STOPPED; \
                               } while(0)
 
 
@@ -696,7 +696,7 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  * \hideinitializer
  *
  */
-#define uip_udpconnection() (uip_conn == NULL)
+#define uip_udpconnection() (mt_uip_conn == NULL)
 
 /**
  * Is new incoming data available?
@@ -707,7 +707,7 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  *
  * \hideinitializer
  */
-#define uip_newdata()   (uip_flags & UIP_NEWDATA)
+#define uip_newdata()   (mt_uip_flags & UIP_NEWDATA)
 
 /**
  * Has previously sent data been acknowledged?
@@ -718,19 +718,19 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  *
  * \hideinitializer
  */
-#define uip_acked()   (uip_flags & UIP_ACKDATA)
+#define uip_acked()   (mt_uip_flags & UIP_ACKDATA)
 
 /**
  * Has the connection just been connected?
  *
  * Reduces to non-zero if the current connection has been connected to
  * a remote host. This will happen both if the connection has been
- * actively opened (with uip_connect()) or passively opened (with
- * uip_listen()).
+ * actively opened (with mt_uip_connect()) or passively opened (with
+ * mt_uip_listen()).
  *
  * \hideinitializer
  */
-#define uip_connected() (uip_flags & UIP_CONNECTED)
+#define uip_connected() (mt_uip_flags & UIP_CONNECTED)
 
 /**
  * Has the connection been closed by the other end?
@@ -740,7 +740,7 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  *
  * \hideinitializer
  */
-#define uip_closed()    (uip_flags & UIP_CLOSE)
+#define uip_closed()    (mt_uip_flags & UIP_CLOSE)
 
 /**
  * Has the connection been aborted by the other end?
@@ -750,7 +750,7 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  *
  * \hideinitializer
  */
-#define uip_aborted()    (uip_flags & UIP_ABORT)
+#define uip_aborted()    (mt_uip_flags & UIP_ABORT)
 
 /**
  * Has the connection timed out?
@@ -760,7 +760,7 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  *
  * \hideinitializer
  */
-#define uip_timedout()    (uip_flags & UIP_TIMEDOUT)
+#define uip_timedout()    (mt_uip_flags & UIP_TIMEDOUT)
 
 /**
  * Do we need to retransmit previously data?
@@ -768,11 +768,11 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  * Reduces to non-zero if the previously sent data has been lost in
  * the network, and the application should retransmit it. The
  * application should send the exact same data as it did the last
- * time, using the uip_send() function.
+ * time, using the mt_uip_send() function.
  *
  * \hideinitializer
  */
-#define uip_rexmit()     (uip_flags & UIP_REXMIT)
+#define uip_rexmit()     (mt_uip_flags & UIP_REXMIT)
 
 /**
  * Is the connection being polled by uIP?
@@ -786,7 +786,7 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  *
  * \hideinitializer
  */
-#define uip_poll()       (uip_flags & UIP_POLL)
+#define uip_poll()       (mt_uip_flags & UIP_POLL)
 
 /**
  * Get the initial maxium segment size (MSS) of the current
@@ -794,7 +794,7 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  *
  * \hideinitializer
  */
-#define uip_initialmss()             (uip_conn->initialmss)
+#define uip_initialmss()             (mt_uip_conn->initialmss)
 
 /**
  * Get the current maxium segment size that can be sent on the current
@@ -807,7 +807,7 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  *
  * \hideinitializer
  */
-#define uip_mss()             (uip_conn->mss)
+#define uip_mss()             (mt_uip_conn->mss)
 
 /**
  * Set up a new UDP connection.
@@ -815,7 +815,7 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
  * This function sets up a new UDP connection. The function will
  * automatically allocate an unused local port for the new
  * connection. However, another port can be chosen by using the
- * uip_udp_bind() call, after the uip_udp_new() function has been
+ * uip_udp_bind() call, after the mt_uip_udp_new() function has been
  * called.
  *
  * Example:
@@ -824,7 +824,7 @@ void uip_send(const void *data, u16_t len) XIP_ATTRIBUTE(".xipsec1");
 UIP_UDP_CONN *c;
 
  uip_ipaddr(&addr, 192,168,2,1);
- c = uip_udp_new(&addr, HTONS(12345));
+ c = mt_uip_udp_new(&addr, HTONS(12345));
  if(c != NULL) {
    uip_udp_bind(c, HTONS(12344));
  }
@@ -833,15 +833,15 @@ UIP_UDP_CONN *c;
  *
  * \param rport The remote port number in network byte order.
  *
- * \return The uip_udp_conn structure for the new connection or NULL
+ * \return The mt_uip_udp_conn structure for the new connection or NULL
  * if no connection could be allocated.
  */
-UIP_UDP_CONN *uip_udp_new(uip_ipaddr_t *ripaddr, u16_t rport) XIP_ATTRIBUTE(".xipsec1");
+UIP_UDP_CONN *mt_uip_udp_new(uip_ipaddr_t *ripaddr, u16_t rport) XIP_ATTRIBUTE(".xipsec1");
 
 /**
  * Removed a UDP connection.
  *
- * \param conn A pointer to the uip_udp_conn structure for the connection.
+ * \param conn A pointer to the mt_uip_udp_conn structure for the connection.
  *
  * \hideinitializer
  */
@@ -850,7 +850,7 @@ UIP_UDP_CONN *uip_udp_new(uip_ipaddr_t *ripaddr, u16_t rport) XIP_ATTRIBUTE(".xi
 /**
  * Bind a UDP connection to a local port.
  *
- * \param conn A pointer to the uip_udp_conn structure for the
+ * \param conn A pointer to the mt_uip_udp_conn structure for the
  * connection.
  *
  * \param port The local port number, in network byte order.
@@ -870,7 +870,7 @@ UIP_UDP_CONN *uip_udp_new(uip_ipaddr_t *ripaddr, u16_t rport) XIP_ATTRIBUTE(".xi
  *
  * \hideinitializer
  */
-#define uip_udp_send(len) uip_send((char *)uip_appdata, len)
+#define uip_udp_send(len) mt_uip_send((char *)mt_uip_appdata, len)
 
 /** @} */
 
@@ -889,7 +889,7 @@ UIP_UDP_CONN *uip_udp_new(uip_ipaddr_t *ripaddr, u16_t rport) XIP_ATTRIBUTE(".xi
  *
  * This function constructs an IP address of the type that uIP handles
  * internally from four bytes. The function is handy for specifying IP
- * addresses to use with e.g. the uip_connect() function.
+ * addresses to use with e.g. the mt_uip_connect() function.
  *
  * Example:
  \code
@@ -897,7 +897,7 @@ UIP_UDP_CONN *uip_udp_new(uip_ipaddr_t *ripaddr, u16_t rport) XIP_ATTRIBUTE(".xi
 UIP_CONN *c;
 
  uip_ipaddr(&ipaddr, 192,168,1,2);
- c = uip_connect(&ipaddr, HTONS(80));
+ c = mt_uip_connect(&ipaddr, HTONS(80));
  \endcode
  *
  * \param addr A pointer to a uip_ipaddr_t variable that will be
@@ -1185,9 +1185,9 @@ u16_t htons(u16_t val);
  *
  * This pointer points to the application data when the application is
  * called. If the application wishes to send data, the application may
- * use this space to write the data into before calling uip_send().
+ * use this space to write the data into before calling mt_uip_send().
  */
-extern void *uip_appdata;
+extern void *mt_uip_appdata;
 
 #if UIP_URGDATA > 0
 /* u8_t *uip_urgdata:
@@ -1222,7 +1222,7 @@ extern void *uip_urgdata;
  * packet.
  *
  */
-extern u16_t uip_len;
+extern u16_t mt_uip_len;
 
 /** @} */
 
@@ -1235,10 +1235,10 @@ extern u16_t uip_urglen, uip_surglen;
 /**
  * Pointer to the current TCP connection.
  *
- * The uip_conn pointer can be used to access the current TCP
+ * The mt_uip_conn pointer can be used to access the current TCP
  * connection.
  */
-extern UIP_CONN *uip_conn;
+extern UIP_CONN *mt_uip_conn;
 /* The array containing all uIP connections. */
 extern UIP_CONN uip_conns[UIP_CONNS];
 /**
@@ -1332,7 +1332,7 @@ extern struct uip_stats uip_stat;
  * that are defined in this file. Please read below for more
  * infomation.
  */
-extern u8_t uip_flags;
+extern u8_t mt_uip_flags;
 
 /* The following flags may be set in the global variable uip_flags
    before calling the application callback. The UIP_ACKDATA,
@@ -1375,17 +1375,17 @@ for it, or an active connection has
 #define UIP_TIMEDOUT  128   /* The connection has been aborted due to
     too many retransmissions. */
 
-/* uip_process(flag):
+/* mt_uip_process(flag):
  *
  * The actual uIP function which does all the work.
  */
-void uip_process(u8_t flag) XIP_ATTRIBUTE(".xipsec1");
+void mt_uip_process(u8_t flag) XIP_ATTRIBUTE(".xipsec1");
 
 void _uip_process(u8_t flag) OVLY_ATTRIBUTE(".ovlysec0");
 
-/* The following flags are passed as an argument to the uip_process()
+/* The following flags are passed as an argument to the mt_uip_process()
    function. They are used to distinguish between the two cases where
-   uip_process() is called. It can be called either because we have
+   mt_uip_process() is called. It can be called either because we have
    incoming data that should be processed, or because the periodic
    timer has fired. These values are never used directly, but only in
    the macrose defined in this file. */
@@ -1407,7 +1407,7 @@ uip_buf buffer. */
 
 #define TCPUDP_FD_MAGIC 128
 
-/* The TCP states used in the uip_conn->tcpstateflags. */
+/* The TCP states used in the mt_uip_conn->tcpstateflags. */
 #define UIP_CLOSED      0
 #define UIP_SYN_RCVD    1
 #define UIP_SYN_SENT    2
@@ -1598,7 +1598,7 @@ struct uip_eth_addr {
  *
  * \return The Internet checksum of the buffer.
  */
-u16_t uip_chksum(u16_t *buf, u16_t len);
+u16_t mt_uip_chksum(u16_t *buf, u16_t len);
 
 /**
  * Calculate the IP header checksum of the packet header in uip_buf.
@@ -1609,7 +1609,7 @@ u16_t uip_chksum(u16_t *buf, u16_t len);
  * \return The IP header checksum of the IP header in the uip_buf
  * buffer.
  */
-u16_t uip_ipchksum(void);
+u16_t mt_uip_ipchksum(void);
 
 /**
  * Calculate the TCP checksum of the packet in uip_buf and uip_appdata.
@@ -1620,7 +1620,7 @@ u16_t uip_ipchksum(void);
  * \return The TCP checksum of the TCP segment in uip_buf and pointed
  * to by uip_appdata.
  */
-u16_t uip_tcpchksum(void);
+u16_t mt_uip_tcpchksum(void);
 
 /**
  * Calculate the UDP checksum of the packet in uip_buf and uip_appdata.

@@ -123,7 +123,7 @@ extern STA_ADMIN_CONFIG *pIoTStaCfg;
  */
 /*-----------------------------------------------------------------------------------*/
 void
-uip_arp_init(void)
+mt_uip_arp_init(void)
 {
     for (i = 0; i < UIP_ARPTAB_SIZE; ++i) {
         memset(arp_table[i].ipaddr, 0, 4);
@@ -140,7 +140,7 @@ uip_arp_init(void)
  */
 /*-----------------------------------------------------------------------------------*/
 void
-uip_arp_timer(void)
+mt_uip_arp_timer(void)
 {
     struct arp_entry *tabptr;
 
@@ -237,7 +237,7 @@ uip_arp_update(u16_t *ipaddr, struct uip_eth_addr *ethaddr)
 void
 uip_arp_ipin(void)
 {
-    uip_len -= sizeof(struct uip_eth_hdr);
+    mt_uip_len -= sizeof(struct uip_eth_hdr);
 
     /* Only insert/update an entry if the source IP address of the
        incoming IP packet comes from a host on the local network. */
@@ -277,17 +277,17 @@ uip_arp_ipin(void)
  * global variable uip_len.
  */
 /*-----------------------------------------------------------------------------------*/
-void uip_arp_arpin(void)  XIP_ATTRIBUTE(".xipsec1");
+void mt_uip_arp_arpin(void)  XIP_ATTRIBUTE(".xipsec1");
 
 void
-uip_arp_arpin(void)
+mt_uip_arp_arpin(void)
 {
 
-    if (uip_len < sizeof(struct arp_hdr)) {
-        uip_len = 0;
+    if (mt_uip_len < sizeof(struct arp_hdr)) {
+        mt_uip_len = 0;
         return;
     }
-    uip_len = 0;
+    mt_uip_len = 0;
 
     switch (BUF->opcode) {
         case HTONS(ARP_REQUEST):
@@ -314,7 +314,7 @@ uip_arp_arpin(void)
                 BUF->sipaddr[1] = uip_hostaddr[1];
 
                 BUF->ethhdr.type = HTONS(UIP_ETHTYPE_ARP);
-                uip_len = sizeof(struct arp_hdr);
+                mt_uip_len = sizeof(struct arp_hdr);
             }
             break;
         case HTONS(ARP_REPLY):
@@ -356,10 +356,10 @@ uip_arp_arpin(void)
  * uip_len.
  */
 /*-----------------------------------------------------------------------------------*/
-void uip_arp_out(void) XIP_ATTRIBUTE(".xipsec1");
+void mt_uip_arp_out(void) XIP_ATTRIBUTE(".xipsec1");
 
 void
-uip_arp_out(void)
+mt_uip_arp_out(void)
 {
     struct arp_entry *tabptr = NULL;
 
@@ -410,9 +410,9 @@ uip_arp_out(void)
             BUF->protolen = 4;
             BUF->ethhdr.type = HTONS(UIP_ETHTYPE_ARP);
 
-            uip_appdata = &uip_buf[UIP_TCPIP_HLEN + UIP_LLH_LEN];
+            mt_uip_appdata = &uip_buf[UIP_TCPIP_HLEN + UIP_LLH_LEN];
 
-            uip_len = sizeof(struct arp_hdr);
+            mt_uip_len = sizeof(struct arp_hdr);
             return;
         }
 
@@ -423,7 +423,7 @@ uip_arp_out(void)
 
     IPBUF->ethhdr.type = HTONS(UIP_ETHTYPE_IP);
 
-    uip_len += sizeof(struct uip_eth_hdr);
+    mt_uip_len += sizeof(struct uip_eth_hdr);
 }
 
 /*-----------------------------------------------------------------------------------*/

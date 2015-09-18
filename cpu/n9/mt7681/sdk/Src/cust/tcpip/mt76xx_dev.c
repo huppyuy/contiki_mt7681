@@ -34,7 +34,7 @@ mt76xx_dev_read(u8_t *p, u16_t len)
 #endif
 
     memcpy(uip_buf, p, len);
-    uip_len = len;
+    mt_uip_len = len;
 
     return 0;
 }
@@ -54,7 +54,7 @@ mt76xx_dev_send(void)
 #if 0 /*for debug*/
     {
         u8_t i;
-        printf_high("write: %d ", uip_len);
+        printf_high("write: %d ", mt_uip_len);
         for (i=0; i<14; i++)
             printf_high("0x%02x ", uip_buf[i]);
         printf_high("\n");
@@ -66,8 +66,8 @@ mt76xx_dev_send(void)
         printf_high("\n");
     }
 #endif
-    memcpy(pBufDesc->pBuf, uip_buf, uip_len);
+    memcpy(pBufDesc->pBuf, uip_buf, mt_uip_len);
 
-    sta_legacy_frame_tx(pBufDesc, uip_len, get_clear_frame_flag());
+    sta_legacy_frame_tx(pBufDesc, mt_uip_len, get_clear_frame_flag());
 }
 /*---------------------------------------------------------------------------*/

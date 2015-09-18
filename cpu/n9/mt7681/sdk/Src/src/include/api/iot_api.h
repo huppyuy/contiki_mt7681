@@ -1006,7 +1006,7 @@ int16   IoT_cp_app_connection_closed(uint8 fd);
 uint16 IoT_cp_app_search_seq(uint8 fd);
 int16   IoT_cp_app_set_seq(uint8 fd, uint16 seq);
 struct cp_app_conn * IoT_cp_app_search_connection(uint8 fd);
-void  uip_send(const void *data, uint16 len) XIP_ATTRIBUTE(".xipsec0");
+void  mt_uip_send(const void *data, uint16 len) XIP_ATTRIBUTE(".xipsec0");
 
 /******************************************************************************
  * FUNCTIONS DEFINITION  -- MTK SmartConnection

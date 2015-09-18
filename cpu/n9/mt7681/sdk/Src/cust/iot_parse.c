@@ -254,7 +254,7 @@ int32 iot_app_proc_func_pkt(
 #if (AES_DATAPARSING_SUPPORT == 1)
         AES_uip_send(iot_buffer, payload_len);
 #else
-        uip_send(iot_buffer, payload_len);
+        mt_uip_send(iot_buffer, payload_len);
 #endif /*(AES_DATAPARSING_SUPPORT == 1)*/
 #else
         iot_udp_pkt_send(src_addr, dest_addr, TCPUDP_SRC_PORT, TCPUDP_DST_PORT, iot_buffer, payload_len);
@@ -322,7 +322,7 @@ int32 iot_app_proc_mgmt_pkt(
 #if (AES_DATAPARSING_SUPPORT == 1)
             AES_uip_send(iot_buffer, payload_len);
 #else
-            uip_send(iot_buffer, payload_len);
+            mt_uip_send(iot_buffer, payload_len);
 #endif  /*(AES_DATAPARSING_SUPPORT == 1)*/
 #else
             iot_udp_pkt_send(src_addr, dest_addr, TCPUDP_SRC_PORT, TCPUDP_DST_PORT, iot_buffer, payload_len);
@@ -365,7 +365,7 @@ int32 iot_app_proc_mgmt_pkt(
 #if (AES_DATAPARSING_SUPPORT == 1)
         AES_uip_send(iot_buffer, payload_len);
 #else
-        uip_send(iot_buffer, payload_len);
+        mt_uip_send(iot_buffer, payload_len);
 #endif /*(AES_DATAPARSING_SUPPORT == 1)*/
 #else /*CFG_SUPPORT_TCPIP*/
         iot_udp_pkt_send(src_addr, dest_addr, TCPUDP_SRC_PORT, TCPUDP_DST_PORT, iot_buffer, payload_len);

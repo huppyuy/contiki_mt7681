@@ -195,12 +195,12 @@ resolv_check_entries(void)
                 namemapptr->tmr = 1;
                 namemapptr->retries = 0;
             }
-            hdr = (struct dns_hdr *)uip_appdata;
+            hdr = (struct dns_hdr *)mt_uip_appdata;
             memset(hdr, 0, sizeof(struct dns_hdr));
             hdr->id = htons(i);
             hdr->flags1 = DNS_FLAG1_RD;
             hdr->numquestions = HTONS(1);
-            query = (char *)uip_appdata + 12;
+            query = (char *)mt_uip_appdata + 12;
             nameptr = namemapptr->name;
             --nameptr;
             /* Convert hostname into suitable query format. */
@@ -219,7 +219,7 @@ resolv_check_entries(void)
                 static unsigned char endquery[] = {0,0,1,0,1};
                 memcpy(query, endquery, 5);
             }
-            uip_udp_send((unsigned char)(query + 5 - (char *)uip_appdata));
+            uip_udp_send((unsigned char)(query + 5 - (char *)mt_uip_appdata));
             break;
         }
     }
@@ -239,7 +239,7 @@ resolv_newdata(void)
     static u16_t i;
     register struct namemap *namemapptr;
 
-    hdr = (struct dns_hdr *)uip_appdata;
+    hdr = (struct dns_hdr *)mt_uip_appdata;
     /*  printf("ID %d\n", htons(hdr->id));
         printf("Query %d\n", hdr->flags1 & DNS_FLAG1_RESPONSE);
         printf("Error %d\n", hdr->flags2 & DNS_FLAG2_ERR_MASK);
@@ -274,7 +274,7 @@ resolv_newdata(void)
         /* Skip the name in the question. XXX: This should really be
            checked agains the name in the question, to be sure that they
            match. */
-        nameptr = parse_name((char *)uip_appdata + 12) + 4;
+        nameptr = parse_name((char *)mt_uip_appdata + 12) + 4;
 
         while (nanswers > 0) {
             /* The first byte in the answer resource record determines if it
@@ -422,7 +422,7 @@ resolv_conf(u16_t *dnsserver)
         uip_udp_remove(resolv_conn);
     }
 
-    resolv_conn = uip_udp_new(dnsserver, HTONS(DNS_SERVER_PORT));
+    resolv_conn = mt_uip_udp_new(dnsserver, HTONS(DNS_SERVER_PORT));
 }
 /*---------------------------------------------------------------------------*/
 /**

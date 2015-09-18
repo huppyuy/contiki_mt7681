@@ -225,7 +225,7 @@ time_exceeded(void)
 
     /* We don't send out ICMP errors for ICMP messages. */
     if (ICMPBUF->proto == UIP_PROTO_ICMP) {
-        uip_len = 0;
+        mt_uip_len = 0;
         return;
     }
     /* Copy fields from packet header into payload of this ICMP packet. */
@@ -254,9 +254,9 @@ time_exceeded(void)
 
     /* The size of the ICMP time exceeded packet is 36 + the size of the
        IP header (20) = 56. */
-    uip_len = 56;
+    mt_uip_len = 56;
     ICMPBUF->len[0] = 0;
-    ICMPBUF->len[1] = uip_len;
+    ICMPBUF->len[1] = mt_uip_len;
 
     /* Fill in the other fields in the IP header. */
     ICMPBUF->vhl = 0x45;
@@ -267,7 +267,7 @@ time_exceeded(void)
 
     /* Calculate IP checksum. */
     ICMPBUF->ipchksum = 0;
-    ICMPBUF->ipchksum = ~(uip_ipchksum());
+    ICMPBUF->ipchksum = ~(mt_uip_ipchksum());
 
 
 }
@@ -362,7 +362,7 @@ uip_fw_output(void)
 {
     struct uip_fw_netif *netif;
 
-    if (uip_len == 0) {
+    if (mt_uip_len == 0) {
         return UIP_FW_ZEROLEN;
     }
 
@@ -472,8 +472,8 @@ uip_fw_forward(void)
         BUF->ipchksum = BUF->ipchksum + HTONS(0x0100);
     }
 
-    if (uip_len > 0) {
-        uip_appdata = &uip_buf[UIP_LLH_LEN + UIP_TCPIP_HLEN];
+    if (mt_uip_len > 0) {
+        mt_uip_appdata = &uip_buf[UIP_LLH_LEN + UIP_TCPIP_HLEN];
         uip_fw_output();
     }
 

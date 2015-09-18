@@ -194,13 +194,13 @@ void iot_cust_u2w_data_hdlr(uint8 *uart_content, int16 uart_content_count)
     if ((uart_content_count > 0) && (uart_content != NULL))
         iot_uart_output(uart_content, uart_content_count);
 
-    /*should not call uip_send here, all uip_send need to be implememted
+    /*should not call mt_uip_send here, all mt_uip_send need to be implememted
        in iot_udp_appcall() / iot_tcp_appcall(),  as the reason of the uIP app
        management (Connection/Port...) is controlled in the iot_***_appcall()*/
-    //uip_send(uart_content, uart_content_count);//mask
+    //mt_uip_send(uart_content, uart_content_count);//mask
 
     /*here should allocate a buffer or flag,
-       Let iot_***_appcall() detected it and call uip_send()*/
+       Let iot_***_appcall() detected it and call mt_uip_send()*/
 
     return;
 }

@@ -17,16 +17,16 @@ ClientActivationInfo mt76xx_Activation;
 /*---------------------------------------------------------------------------*/
 /*
  * The initialization function. We must explicitly call this function
- * from the system initialization code, some time after uip_init() is
+ * from the system initialization code, some time after mt_uip_init() is
  * called.
  */
 void
 iot_tcp_app_init(void)
 {
     /* We start to listen for connections on TCP port 7681. */
-    uip_listen(HTONS(IoTpAd.ComCfg.Local_TCP_Srv_Port));
+    mt_uip_listen(HTONS(IoTpAd.ComCfg.Local_TCP_Srv_Port));
 #if CFG_SUPPORT_TCPIP_ROBUST_TEST
-    uip_listen(HTONS(7684));
+    mt_uip_listen(HTONS(7684));
 #endif
 
 #if UIP_HTTP_CLIENT_SUPPORT
@@ -34,7 +34,7 @@ iot_tcp_app_init(void)
     //webclient_get("192.168.1.100", HTTP_SERVER_DEFAULT_PORT, "/MT7681_sta_header.bin");
     webclient_get("192.168.2.1", HTTP_SERVER_DEFAULT_PORT, "/index.html");
     //printf_high("http client port:%d\n", http_clientPort);
-    uip_listen(HTONS(http_clientPort));
+    mt_uip_listen(HTONS(http_clientPort));
 #endif
 
 #if TCP_CLI_APP1_ENABLE
@@ -42,11 +42,11 @@ iot_tcp_app_init(void)
 #endif
 
 #if TCP_SRV_APP1_ENABLE
-    uip_listen(HTONS(TCP_SRV_APP1_LOCAL_PORT));
+    mt_uip_listen(HTONS(TCP_SRV_APP1_LOCAL_PORT));
 #endif
 
 #if UIP_CLOUD_SERVER_SUPPORT
-    uip_listen(HTONS(CLOUD_TCP_SERVER_PORT));
+    mt_uip_listen(HTONS(CLOUD_TCP_SERVER_PORT));
     cloud_para_check_connect();
 #endif
 
@@ -63,7 +63,7 @@ iot_tcp_app_init(void)
 void
 iot_tcp_appcall(void)
 {
-    u16_t lport = HTONS(uip_conn->lport);
+    u16_t lport = HTONS(mt_uip_conn->lport);
 
 #if UIP_HTTP_CLIENT_SUPPORT
     if (lport == http_clientPort) {
@@ -90,7 +90,7 @@ iot_tcp_appcall(void)
     if (uip_newdata()) {
         if(lport == CLOUD_TCP_SERVER_PORT){
             if(uip_datalen()%2 == 0){
-                cloud_activation_process(uip_appdata, uip_datalen());
+                cloud_activation_process(mt_uip_appdata, uip_datalen());
             }else{
                 printf_high("data length:%d from apk error\n", uip_datalen());
             }
@@ -117,21 +117,21 @@ void
 handle_tcp_app(void)
 {
     /*
-    * The uip_conn structure has a field called "appstate" that holds
+    * The mt_uip_conn structure has a field called "appstate" that holds
     * the application state of the connection. We make a pointer to
     * this to access it easier.
     */
-    struct iot_tcp_app_state *s = &(uip_conn->appstate);
-    u16_t lport = HTONS(uip_conn->lport);
+    struct iot_tcp_app_state *s = &(mt_uip_conn->appstate);
+    u16_t lport = HTONS(mt_uip_conn->lport);
 
     if (uip_aborted() || uip_timedout() || uip_closed()) {
         switch (lport) {
             case 7682: //IoT as clent.
                 cli_fd = -1;
         }
-        printf("fd %d uip_aborted.%d\n", uip_conn->fd, HTONS(uip_conn->lport));
+        printf("fd %d uip_aborted.%d\n", mt_uip_conn->fd, HTONS(mt_uip_conn->lport));
 #if ENABLE_DATAPARSING_SEQUENCE_MGMT
-        IoT_cp_app_connection_closed(uip_conn->fd);
+        IoT_cp_app_connection_closed(mt_uip_conn->fd);
 #endif
         s->state = IOT_APP_S_CLOSED;
         s->buf = NULL;
@@ -144,18 +144,18 @@ handle_tcp_app(void)
         u8_t logon_msg[16] = "userlogon:";
 
         sprintf((char *)raddr, "%d.%d.%d.%d",
-                uip_ipaddr1(uip_conn->ripaddr), uip_ipaddr2(uip_conn->ripaddr),
-                uip_ipaddr3(uip_conn->ripaddr), uip_ipaddr4(uip_conn->ripaddr));
+                uip_ipaddr1(mt_uip_conn->ripaddr), uip_ipaddr2(mt_uip_conn->ripaddr),
+                uip_ipaddr3(mt_uip_conn->ripaddr), uip_ipaddr4(mt_uip_conn->ripaddr));
 
         printf_high("Connected fd:%d,lp:%d,ra:%s,rp:%d\n",
-                    uip_conn->fd, HTONS(uip_conn->lport), raddr, HTONS(uip_conn->rport));
+                    mt_uip_conn->fd, HTONS(mt_uip_conn->lport), raddr, HTONS(mt_uip_conn->rport));
 
 #if ENABLE_DATAPARSING_SEQUENCE_MGMT
-        IoT_cp_app_connection_connected(uip_conn->fd
+        IoT_cp_app_connection_connected(mt_uip_conn->fd
 #if (NO_USED_CODE_REMOVE==0)
-                                        ,HTONS(uip_conn->lport),
+                                        ,HTONS(mt_uip_conn->lport),
                                         raddr,
-                                        HTONS(uip_conn->rport)
+                                        HTONS(mt_uip_conn->rport)
 #endif
                                        );
 #endif
@@ -164,7 +164,7 @@ handle_tcp_app(void)
         switch (lport) {
             case 7682:
                 memcpy(logon_msg+10, gCurrentAddress, 6);
-                uip_send(logon_msg, 16);
+                mt_uip_send(logon_msg, 16);
                 break;
         }
     }
@@ -177,20 +177,20 @@ handle_tcp_app(void)
     }
 
     if (uip_newdata()) {
-        printf("RX fd : %d\n", uip_conn->fd);
+        printf("RX fd : %d\n", mt_uip_conn->fd);
         if (lport == IoTpAd.ComCfg.Local_TCP_Srv_Port || lport==7682) {
 #if ENABLE_DATAPARSING_SEQUENCE_MGMT
-            iot_app_proc_pkt(uip_conn->fd, uip_appdata,uip_datalen());
+            iot_app_proc_pkt(mt_uip_conn->fd, mt_uip_appdata,uip_datalen());
 #else
-            iot_app_proc_pkt(uip_appdata,uip_datalen());
+            iot_app_proc_pkt(mt_uip_appdata,uip_datalen());
 #endif
 #if CFG_SUPPORT_TCPIP_ROBUST_TEST
         } else if (lport==7684) {
-            uip_send(uip_appdata, uip_datalen());
+            mt_uip_send(mt_uip_appdata, uip_datalen());
 #endif
         } else {
 #if ATCMD_TCPIP_SUPPORT
-            iot_uart_output(uip_appdata, (int16)uip_datalen());
+            iot_uart_output(mt_uip_appdata, (int16)uip_datalen());
 #endif
         }
     }
@@ -201,7 +201,7 @@ handle_tcp_app(void)
         if (s->state == IOT_APP_S_CLOSED) {
             uip_close();
         } else if (s->len > 0) {
-            uip_send(s->buf, s->len);
+            mt_uip_send(s->buf, s->len);
             s->state = IOT_APP_S_DATA_SEND;
         }
 #endif
@@ -220,7 +220,7 @@ void tcp_cli_app1_init(void)
     uip_ipaddr(raddr, iot_srv_ip[0],iot_srv_ip[1], iot_srv_ip[2],iot_srv_ip[3]);
 
     /* Specify remote address and port here. */
-    tcp_conn = uip_connect(&raddr, HTONS(TCP_CLI_APP1_REMOTE_PORT));
+    tcp_conn = mt_uip_connect(&raddr, HTONS(TCP_CLI_APP1_REMOTE_PORT));
 
     if (tcp_conn) {
         tcp_conn->lport = HTONS(TCP_CLI_APP1_LOCAL_PORT);
@@ -236,14 +236,14 @@ void handle_tcp_cli_app1(void)
 
     if (uip_newdata()) {
         printf_high("TCP Client RX [%d] bytes\n", uip_datalen());
-        iot_uart_output(uip_appdata, uip_datalen());
+        iot_uart_output(mt_uip_appdata, uip_datalen());
     }
 
     if (uip_poll()) {
         /* below codes shows how to send data to client  */
         if ((app_init == FALSE) || timer_expired(&user_timer)) {
             printf_high("TCP CLIENT APP1 uip_poll_timer_expired\n");
-            uip_send("hello,this is tcp cli...", 24);
+            mt_uip_send("hello,this is tcp cli...", 24);
             timer_set(&user_timer, 5*CLOCK_SECOND);
             app_init = TRUE;
         }
@@ -259,14 +259,14 @@ void handle_tcp_srv_app1(void)
 
     if (uip_newdata()) {
         printf_high("Server RX [%d] bytes\n", uip_datalen());
-        iot_uart_output(uip_appdata, uip_datalen());
+        iot_uart_output(mt_uip_appdata, uip_datalen());
     }
 
     if (uip_poll()) {
         /* below codes shows how to send data to client  */
         if ((app_init == FALSE) || timer_expired(&user_timer)) {
             printf_high("TCP SERVER APP1 uip_poll_timer_expired\n");
-            uip_send("hello,this is tcp srv...", 24);
+            mt_uip_send("hello,this is tcp srv...", 24);
             timer_set(&user_timer, 5*CLOCK_SECOND);
             app_init = TRUE;
         }

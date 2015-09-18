@@ -11,7 +11,7 @@ void udp_client_init()
     uip_ipaddr(raddr, 255,255,255,255);
 
     /* Specify remote address and port here. */
-    udp_conn = uip_udp_new(&raddr, HTONS(9999));
+    udp_conn = mt_uip_udp_new(&raddr, HTONS(9999));
     if (udp_conn) {
         /* Specify local port here. */
         uip_udp_bind(udp_conn, HTONS(6666));
@@ -31,7 +31,7 @@ void udp_client_sample()
     if (uip_poll()) {
         /* below codes shows how to send data. */
         if (timer_expired(&udp_client_timer)) {
-            uip_send("hello world.", 12);
+            mt_uip_send("hello world.", 12);
         }
     }
 }
@@ -47,7 +47,7 @@ void udp_cli_app1_init(void)
     uip_ipaddr(raddr, iot_srv_ip[0],iot_srv_ip[1], iot_srv_ip[2],iot_srv_ip[3]);
 
     /* Specify remote address and port here. */
-    udp_conn = uip_udp_new(&raddr, HTONS(UDP_CLI_APP1_REMOTE_PORT));
+    udp_conn = mt_uip_udp_new(&raddr, HTONS(UDP_CLI_APP1_REMOTE_PORT));
 
     if (udp_conn) {
         /* Specify local port here. */
@@ -63,14 +63,14 @@ void handle_udp_cli_app1(void)
 
     if (uip_newdata()) {
         printf_high("Server RX %d bytes\n", uip_datalen());
-        iot_uart_output(uip_appdata, uip_datalen());
+        iot_uart_output(mt_uip_appdata, uip_datalen());
     }
 
     if (uip_poll()) {
         /* below codes shows how to send data to UDP Server  */
         if ((app_init == FALSE) || timer_expired(&user_timer)) {
             printf_high("UDP CLIENT APP1 uip_poll_timer_expired\n");
-            uip_send("hello,this is udp cli...", 24);
+            mt_uip_send("hello,this is udp cli...", 24);
             timer_set(&user_timer, 5*CLOCK_SECOND);
             app_init = TRUE;
         }

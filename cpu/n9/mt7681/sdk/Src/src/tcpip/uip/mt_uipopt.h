@@ -519,7 +519,7 @@ void uip_log(char *m);
  * using the UIP_APPCALL definition.
  *
  * uIP applications can store the application state within the
- * uip_conn structure by specifying the type of the application
+ * mt_uip_conn structure by specifying the type of the application
  * structure by typedef:ing the type uip_tcp_appstate_t and uip_udp_appstate_t.
  *
  * The file containing the definitions must be included in the
@@ -553,7 +553,7 @@ typedef struct httpd_state uip_tcp_appstate_t
  * \var typedef uip_tcp_appstate_t
  *
  * The type of the application state that is to be stored in the
- * uip_conn structure. This usually is typedef:ed to a struct holding
+ * mt_uip_conn structure. This usually is typedef:ed to a struct holding
  * application state information.
  */
 
@@ -561,7 +561,7 @@ typedef struct httpd_state uip_tcp_appstate_t
  * \var typedef uip_udp_appstate_t
  *
  * The type of the application state that is to be stored in the
- * uip_conn structure. This usually is typedef:ed to a struct holding
+ * mt_uip_conn structure. This usually is typedef:ed to a struct holding
  * application state information.
  */
 /** @} */

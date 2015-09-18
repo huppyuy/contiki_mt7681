@@ -219,3 +219,4 @@ contiki-cc2530dk.lib
 /cpu/n9/mt7681/sdk/Src/obj/sta/tcpip/uip_timer.o
 /cpu/n9/mt7681/sdk/Src/obj/sta/tcpip/webclient-strings.o
 /cpu/n9/mt7681/sdk/Src/obj/sta/wifi_task_pub.o
+/examples/hello-world/hello-world.gy7681

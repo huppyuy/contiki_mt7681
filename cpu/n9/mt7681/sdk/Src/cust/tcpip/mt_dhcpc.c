@@ -211,7 +211,7 @@ static void
 send_discover(void)
 {
     u8_t *end;
-    struct dhcp_msg *m = (struct dhcp_msg *)uip_appdata;
+    struct dhcp_msg *m = (struct dhcp_msg *)mt_uip_appdata;
     printf("dhcp TX DIS\n");
     create_msg(m);
 
@@ -220,7 +220,7 @@ send_discover(void)
     end = add_other_options(end, DHCP_OPTION_HOST_NAME, hostname, strlen(hostname));
     end = add_end(end);
 
-    uip_send(uip_appdata, end - (u8_t *)uip_appdata);
+    mt_uip_send(mt_uip_appdata, end - (u8_t *)mt_uip_appdata);
 }
 /*---------------------------------------------------------------------------*/
 static void
@@ -230,7 +230,7 @@ static void
 send_request(void)
 {
     u8_t *end;
-    struct dhcp_msg *m = (struct dhcp_msg *)uip_appdata;
+    struct dhcp_msg *m = (struct dhcp_msg *)mt_uip_appdata;
     printf("dhcp TX REQ\n");
     create_msg(m);
 
@@ -240,7 +240,7 @@ send_request(void)
     end = add_other_options(end, DHCP_OPTION_HOST_NAME, hostname, strlen(hostname));
     end = add_end(end);
 
-    uip_send(uip_appdata, end - (u8_t *)uip_appdata);
+    mt_uip_send(mt_uip_appdata, end - (u8_t *)mt_uip_appdata);
 }
 /*---------------------------------------------------------------------------*/
 static u8_t
@@ -287,7 +287,7 @@ parse_msg(void) XIP_ATTRIBUTE(".xipsec1");
 static u8_t
 parse_msg(void)
 {
-    struct dhcp_msg *m = (struct dhcp_msg *)uip_appdata;
+    struct dhcp_msg *m = (struct dhcp_msg *)mt_uip_appdata;
 
     if (m->op == DHCP_REPLY &&
         memcmp(m->xid, xid, sizeof(xid)) == 0 &&
@@ -417,7 +417,7 @@ dhcpc_init(const void *mac_addr, int mac_len)
 
     s.state = STATE_INITIAL;
     uip_ipaddr(addr, 255,255,255,255);
-    s.conn = uip_udp_new(&addr, HTONS(DHCPC_SERVER_PORT));
+    s.conn = mt_uip_udp_new(&addr, HTONS(DHCPC_SERVER_PORT));
     if (s.conn != NULL) {
         uip_udp_bind(s.conn, HTONS(DHCPC_CLIENT_PORT));
     }

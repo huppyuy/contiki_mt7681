@@ -160,7 +160,7 @@ webclient_get(char *host, u16_t port, char *file)
         }
     }
 
-    conn = uip_connect(ipaddr, htons(port));
+    conn = mt_uip_connect(ipaddr, htons(port));
 
     if (conn == NULL) {
         printf_high("web client connect fail!\n");
@@ -202,7 +202,7 @@ void senddata(void)
     char *cptr;
 
     if (s.getrequestleft > 0) {
-        cptr = getrequest = (char *)uip_appdata;
+        cptr = getrequest = (char *)mt_uip_appdata;
 
         cptr = copy_string(cptr, http_get, sizeof(http_get) - 1);
         cptr = copy_string(cptr, s.file, strlen(s.file));
@@ -221,7 +221,7 @@ void senddata(void)
         len = s.getrequestleft > uip_mss()?
               uip_mss():
               s.getrequestleft;
-        uip_send(&(getrequest[s.getrequestptr]), len);
+        mt_uip_send(&(getrequest[s.getrequestptr]), len);
     }
 }
 /*-----------------------------------------------------------------------------------*/
@@ -245,9 +245,9 @@ parse_statusline(u16_t len)
     char *cptr;
 
     while (len > 0 && s.httpheaderlineptr < sizeof(s.httpheaderline)) {
-        s.httpheaderline[s.httpheaderlineptr] = *(char *)uip_appdata;
+        s.httpheaderline[s.httpheaderlineptr] = *(char *)mt_uip_appdata;
         //++((char *)uip_appdata);
-        uip_appdata = uip_appdata +1;
+        mt_uip_appdata = mt_uip_appdata +1;
         --len;
         if (s.httpheaderline[s.httpheaderlineptr] == ISO_nl) {
 
@@ -315,9 +315,9 @@ parse_headers(u16_t len)
     static unsigned char i;
 
     while (len > 0 && s.httpheaderlineptr < sizeof(s.httpheaderline)) {
-        s.httpheaderline[s.httpheaderlineptr] = *(char *)uip_appdata;
+        s.httpheaderline[s.httpheaderlineptr] = *(char *)mt_uip_appdata;
         //++((char *)uip_appdata);
-        uip_appdata = uip_appdata +1;
+        mt_uip_appdata = mt_uip_appdata +1;
         --len;
         if (s.httpheaderline[s.httpheaderlineptr] == ISO_nl) {
             /* We have an entire HTTP header line in s.httpheaderline, so
@@ -426,7 +426,7 @@ void newdata(void)
     //printf_high("enter newdata, len:%d\n", len);
     if (len > 0 && s.state == WEBCLIENT_STATE_DATA &&
         s.httpflag != HTTPFLAG_MOVED) {
-        webclient_datahandler((char *)uip_appdata, len);
+        webclient_datahandler((char *)mt_uip_appdata, len);
     }
 }
 /*-----------------------------------------------------------------------------------*/
