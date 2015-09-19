@@ -329,6 +329,7 @@ typedef struct _IOT_CUST_OP_ {
 
 typedef struct GNU_PACKED _IOT_CUST_CFG_ {
     TIMER_T   custTimer0;
+	TIMER_T   custTimer1;//timer for os second time
 } IOT_CUST_TIMER;
 
 

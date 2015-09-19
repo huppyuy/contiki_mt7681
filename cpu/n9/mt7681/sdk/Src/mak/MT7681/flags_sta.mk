@@ -214,7 +214,7 @@ FUNCFLAGS	+=	-DWIFI_SUPPORT=1
 # WIN FEATURES FLAGS
 
 # DEBUG MESSAGE FLAGS
-FUNCFLAGS	+=	-DDBG_MSG=0
+FUNCFLAGS	+=	-DDBG_MSG=1
 FUNCFLAGS	+=	-DDBG_MSG_HIGH=1
 FUNCFLAGS	+=	-DNO_USED_CODE_REMOVE=1
 FUNCFLAGS	+=	-DCFG_RANDOM_MAC=0
@@ -245,7 +245,7 @@ FUNCFLAGS	+=	-DENABLE_DATAPARSING_SEQUENCE_MGMT=0
 #----UARTRX_TO_AIR_LEVEL
 #----1,handle uart rx data normaly,and send uart rx data which left in ring to air by peer query;
 #----2,do not handle uart rx data,only send uart rx data to air automatically
-FUNCFLAGS	+=	-DUARTRX_TO_AIR_LEVEL=1
+FUNCFLAGS	+=	-DUARTRX_TO_AIR_LEVEL=0
 
 # FEATURE FLAGS
 FUNCFLAGS	+=	-DXIP_ENABLE=1                #xip_ovly.h

@@ -1261,53 +1261,53 @@ extern u8_t uip_acc32[4];
  */
 struct uip_stats {
     struct {
-        uip_stats_t drop;     /**< Number of dropped packets at the IP
+        mt_uip_stats_t drop;     /**< Number of dropped packets at the IP
                  layer. */
-        uip_stats_t recv;     /**< Number of received packets at the IP
+        mt_uip_stats_t recv;     /**< Number of received packets at the IP
                  layer. */
-        uip_stats_t sent;     /**< Number of sent packets at the IP
+        mt_uip_stats_t sent;     /**< Number of sent packets at the IP
                  layer. */
-        uip_stats_t vhlerr;   /**< Number of packets dropped due to wrong
+        mt_uip_stats_t vhlerr;   /**< Number of packets dropped due to wrong
                  IP version or header length. */
-        uip_stats_t hblenerr; /**< Number of packets dropped due to wrong
+        mt_uip_stats_t hblenerr; /**< Number of packets dropped due to wrong
                  IP length, high byte. */
-        uip_stats_t lblenerr; /**< Number of packets dropped due to wrong
+        mt_uip_stats_t lblenerr; /**< Number of packets dropped due to wrong
                  IP length, low byte. */
-        uip_stats_t fragerr;  /**< Number of packets dropped since they
+        mt_uip_stats_t fragerr;  /**< Number of packets dropped since they
                  were IP fragments. */
-        uip_stats_t chkerr;   /**< Number of packets dropped due to IP
+        mt_uip_stats_t chkerr;   /**< Number of packets dropped due to IP
                  checksum errors. */
-        uip_stats_t protoerr; /**< Number of packets dropped since they
+        mt_uip_stats_t protoerr; /**< Number of packets dropped since they
                  were neither ICMP, UDP nor TCP. */
     } ip;                   /**< IP statistics. */
     struct {
-        uip_stats_t drop;     /**< Number of dropped ICMP packets. */
-        uip_stats_t recv;     /**< Number of received ICMP packets. */
-        uip_stats_t sent;     /**< Number of sent ICMP packets. */
-        uip_stats_t typeerr;  /**< Number of ICMP packets with a wrong
+        mt_uip_stats_t drop;     /**< Number of dropped ICMP packets. */
+        mt_uip_stats_t recv;     /**< Number of received ICMP packets. */
+        mt_uip_stats_t sent;     /**< Number of sent ICMP packets. */
+        mt_uip_stats_t typeerr;  /**< Number of ICMP packets with a wrong
                  type. */
     } icmp;                 /**< ICMP statistics. */
     struct {
-        uip_stats_t drop;     /**< Number of dropped TCP segments. */
-        uip_stats_t recv;     /**< Number of recived TCP segments. */
-        uip_stats_t sent;     /**< Number of sent TCP segments. */
-        uip_stats_t chkerr;   /**< Number of TCP segments with a bad
+        mt_uip_stats_t drop;     /**< Number of dropped TCP segments. */
+        mt_uip_stats_t recv;     /**< Number of recived TCP segments. */
+        mt_uip_stats_t sent;     /**< Number of sent TCP segments. */
+        mt_uip_stats_t chkerr;   /**< Number of TCP segments with a bad
                  checksum. */
-        uip_stats_t ackerr;   /**< Number of TCP segments with a bad ACK
+        mt_uip_stats_t ackerr;   /**< Number of TCP segments with a bad ACK
                  number. */
-        uip_stats_t rst;      /**< Number of recevied TCP RST (reset) segments. */
-        uip_stats_t rexmit;   /**< Number of retransmitted TCP segments. */
-        uip_stats_t syndrop;  /**< Number of dropped SYNs due to too few
+        mt_uip_stats_t rst;      /**< Number of recevied TCP RST (reset) segments. */
+        mt_uip_stats_t rexmit;   /**< Number of retransmitted TCP segments. */
+        mt_uip_stats_t syndrop;  /**< Number of dropped SYNs due to too few
                  connections was avaliable. */
-        uip_stats_t synrst;   /**< Number of SYNs for closed ports,
+        mt_uip_stats_t synrst;   /**< Number of SYNs for closed ports,
                  triggering a RST. */
     } tcp;                  /**< TCP statistics. */
 #if UIP_UDP
     struct {
-        uip_stats_t drop;     /**< Number of dropped UDP segments. */
-        uip_stats_t recv;     /**< Number of recived UDP segments. */
-        uip_stats_t sent;     /**< Number of sent UDP segments. */
-        uip_stats_t chkerr;   /**< Number of UDP segments with a bad
+        mt_uip_stats_t drop;     /**< Number of dropped UDP segments. */
+        mt_uip_stats_t recv;     /**< Number of recived UDP segments. */
+        mt_uip_stats_t sent;     /**< Number of sent UDP segments. */
+        mt_uip_stats_t chkerr;   /**< Number of UDP segments with a bad
                  checksum. */
     } udp;                  /**< UDP statistics. */
 #endif /* UIP_UDP */

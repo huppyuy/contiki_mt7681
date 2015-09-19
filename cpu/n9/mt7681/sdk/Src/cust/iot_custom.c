@@ -10,6 +10,7 @@
 #include "ap_pub.h"
 #endif
 
+#include "autostart.h"
 /******************************************************************************
 * MODULE NAME:     iot_customer.c
 * PROJECT CODE:    __MT7681__
@@ -155,7 +156,11 @@ void iot_cust_scan_done(void)
 ========================================================================*/
 void iot_cust_subtask1(void)
 {
- 
+	
+	uint8 r;
+	do {
+		r = process_run();
+	} while(r > 0);
 }
 
 /*========================================================================
@@ -181,7 +186,10 @@ void iot_cust_preinit(void)
 ========================================================================*/
 void iot_cust_init(void)
 {
-    //printf_high("Hello world \n");
+    printf("Hello world 4 \n");
+	clock_init();
+	process_init();
+	autostart_start(autostart_processes);
 }
 
 
@@ -420,7 +428,7 @@ void iot_cust_ops(void)
 ========================================================================*/
 void iot_cust_timer0_timeout_actioin(uint32 param, uint32 param2)
 {
-    printf("iot_cust_timer0_timeout_actioin\n");
+    //printf("iot_cust_timer0_timeout_actioin\n");
 
 #if (UARTRX_TO_AIR_LEVEL == 2)
     iot_cust_u2w_mode_chg_hdlr();

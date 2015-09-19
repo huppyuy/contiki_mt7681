@@ -388,7 +388,7 @@ _handle_dhcp(void)
     if (uip_poll())  {
         if (lease_time_flag) {
             if (timer_expired(&s.lease_timer)) {
-                printf("dhcp lease timer timeout.time:%d\n", GetMsTimer());
+                printf("dhcp lease timer timeout.time:%d\n", iot_get_ms_time());
                 timer_reset(&s.lease_timer);
                 s.state = STATE_SEND_REQ;
                 send_request();

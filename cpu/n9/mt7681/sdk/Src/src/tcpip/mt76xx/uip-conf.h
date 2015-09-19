@@ -85,14 +85,14 @@ typedef unsigned short u16_t;
  *
  * \hideinitializer
  */
-typedef unsigned short uip_stats_t;
+typedef unsigned short mt_uip_stats_t;
 
 /**
  * Maximum number of TCP connections.
  *
  * \hideinitializer
  */
-#define UIP_CONF_MAX_CONNECTIONS 0
+#define UIP_CONF_MAX_CONNECTIONS 3
 
 /**
  * Maximum number of listening TCP ports.
@@ -100,16 +100,16 @@ typedef unsigned short uip_stats_t;
  * \hideinitializer
  */
 #if CFG_SUPPORT_TCPIP_ROBUST_TEST
-#define UIP_CONF_MAX_LISTENPORTS 0
+#define UIP_CONF_MAX_LISTENPORTS 2
 #else
-#define UIP_CONF_MAX_LISTENPORTS 0 //Jody for more connections
+#define UIP_CONF_MAX_LISTENPORTS 6 //Jody for more connections
 #endif
 /**
  * Maximum number of UDP connections..
  *
  * \hideinitializer
  */
-#define UIP_CONF_UDP_CONNS  2
+#define UIP_CONF_UDP_CONNS  6
 
 
 /**
@@ -181,7 +181,7 @@ typedef unsigned short uip_stats_t;
 #define UIP_CONF_RESOLV_ENTRIES 1
 
 #define UIP_HTTP_CLIENT_SUPPORT 1
-#define UIP_CLOUD_SERVER_SUPPORT 1
+#define UIP_CLOUD_SERVER_SUPPORT 0
 /* Here we include the header file for the application(s) we use in
    our project. */
 /*#include "smtp.h"*/

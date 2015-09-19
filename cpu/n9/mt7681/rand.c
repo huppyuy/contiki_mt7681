@@ -1,5 +1,3 @@
-//#include "api_random.h"
-
 int
 rand(void)
 {
